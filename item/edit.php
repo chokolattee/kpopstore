@@ -9,7 +9,7 @@ $sql1 = "SELECT * FROM item_details WHERE item_id = {$item_id}";
 $result1 = mysqli_query($conn, $sql1);
 $row = mysqli_fetch_assoc($result1);
 
-$sql2 = "SELECT artist_id, artist_name FROM artists"; // Specify the fields you need
+$sql2 = "SELECT artist_id, artist_name FROM artists"; 
 $artistsResult = mysqli_query($conn, $sql2);
 ?>
 

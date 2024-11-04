@@ -10,8 +10,5 @@ $result_item = mysqli_query($conn, $sql_item);
 
 if (mysqli_affected_rows($conn) > 0) {
     header("Location: index.php");
-    exit();
-} else {
-    echo "Error deleting item: " . mysqli_error($conn);
-}
+} 
 ?>
