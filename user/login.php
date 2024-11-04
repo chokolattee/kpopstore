@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-include("../includes/header.php");
 include("../includes/config.php");
 
 if (isset($_POST['submit'])) {
@@ -39,6 +38,10 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="../includes/style/style.css">
 </head>
 <body>
+<header class="header">
+        <h1>HALLYU</h1>
+    </header>
+    
     <div class="login-form-container">
         <h2><b>Log In</b></h2>
         <br>

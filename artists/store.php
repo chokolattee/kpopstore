@@ -3,7 +3,7 @@ session_start();
 include('../includes/config.php');
 
 if (isset($_POST['submit'])) {
-    $name = trim($_POST['artistName']); // Get the artist name
+    $name = trim($_POST['artistName']);
 
     if (isset($_FILES['img_path'])) {
         // Validate file type

@@ -3,20 +3,17 @@ session_start(); // Make sure the session is started
 include('../includes/header.php');
 require("../includes/config.php");
 
-// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['message'] = 'Login first to access resource';
     header("Location: ../user/login.php");
-    exit; // Important to prevent further execution
 }
 
-// Display any session messages
 if (isset($_SESSION['message'])) {
     echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>
             <strong>{$_SESSION['message']}</strong>
             <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
           </div>";
-    unset($_SESSION['message']); // Clear message after displaying
+    unset($_SESSION['message']); 
 }
 ?>
 <body>
