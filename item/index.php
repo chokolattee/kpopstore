@@ -13,16 +13,12 @@ else {
 
 
 if ($keyword) {
-    $sql = "SELECT * FROM item WHERE description LIKE '%{$keyword}%'";
-    $result = mysqli_query($conn, $sql);
+    $sql = "SELECT * FROM item_details WHERE description LIKE '%{$keyword}%'";
 } else {
-    $sql = "SELECT * FROM item";
-    $result = mysqli_query($conn, $sql);
+    $sql = "SELECT * FROM item_details";
 }
-
-$sql1 = "SELECT * FROM item_details";
-$result1 = mysqli_query($conn, $sql1);
-$itemCount = mysqli_num_rows($result1);
+$result = mysqli_query($conn, $sql);
+$itemCount = mysqli_num_rows($result);
 ?>
 
 <body>
@@ -44,9 +40,16 @@ $itemCount = mysqli_num_rows($result1);
         </thead>
         <tbody>
             <?php
-            while ($row = mysqli_fetch_assoc($result1)) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>";
-                echo "<td><img src='" .($row['img_path']) . "' width='150' height='150' /></td>";
+
+                echo "<td>";
+                $images = explode(',', $row['images']);
+                foreach ($images as $image) {
+                    echo "<img src='" . ($image) . "' width='100' height='100' style='margin: 5px;' />";
+                }
+                echo "</td>";
+
                 echo "<td>" . ($row['item_id']) . "</td>";
                 echo "<td>" . ($row['description']) . "</td>";
                 echo "<td>" . ($row['category']) . "</td>";

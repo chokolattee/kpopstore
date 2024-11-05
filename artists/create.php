@@ -3,12 +3,12 @@ session_start();
 print_r($_SESSION);
 include('../includes/header.php');
 include('../includes/config.php');
-if(! isset($_SESSION['user_id'])){
-    $_SESSION['message'] = 'Login first to access resource';
-    header("Location: ../user/login.php");
+// if(! isset($_SESSION['user_id'])){
+//     $_SESSION['message'] = 'Login first to access resource';
+//     header("Location: ../user/login.php");
     
-}
-else { 
+// }
+// else { 
     ?>
 <body>
     <div class="container-fluid container-lg">
@@ -34,5 +34,5 @@ else {
 
 <?php
 include('../includes/footer.php');
-            }
+            // }
 ?>

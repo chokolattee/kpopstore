@@ -5,7 +5,7 @@ include('../includes/config.php');
 
 // var_dump($_SESSION);
 
-$sql = "SELECT artist_id, artist_name FROM artists"; 
+$sql = "SELECT artist_id, artist_name FROM artists";
 $result = mysqli_query($conn, $sql);
 
 ?>
@@ -17,9 +17,9 @@ $result = mysqli_query($conn, $sql);
             <div class="form-group">
                 <label for="name">Item Name</label>
                 <input type="text" class="form-control" id="name" placeholder="Enter item name" name="description" value="<?php
-                            if (isset($_SESSION['desc']))
-                                echo $_SESSION['desc'];
-                            ?>" />
+                                                                                                                            if (isset($_SESSION['desc']))
+                                                                                                                                echo $_SESSION['desc'];
+                                                                                                                            ?>" />
 
                 <small><?php
                         if (isset($_SESSION['descError'])) {
@@ -37,17 +37,17 @@ $result = mysqli_query($conn, $sql);
                     <?php } ?>
                 </select>
 
-            <label for="category" class="form-label">Category</label>
-            <select class="form-select" id="category" name="category" required>
-                <option value="Album">Album</option>
-                <option value="Merchandise">Merchandise</option>
-            </select>
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" name="category" required>
+                    <option value="Album">Album</option>
+                    <option value="Merchandise">Merchandise</option>
+                </select>
 
                 <label for="cost">Cost Price</label>
                 <input type="text" class="form-control" id="cost" placeholder="Enter item cost price" name="cost_price" value="<?php
-                        if (isset($_SESSION['cost']))
-                            echo $_SESSION['cost'];
-                        ?>">
+                                                                                                                                if (isset($_SESSION['cost']))
+                                                                                                                                    echo $_SESSION['cost'];
+                                                                                                                                ?>">
                 <small><?php
                         if (isset($_SESSION['costError'])) {
                             echo $_SESSION['costError'];
@@ -57,28 +57,30 @@ $result = mysqli_query($conn, $sql);
 
                 <label for="sell">Sell Price</label>
                 <input type="text" class="form-control" id="sell" placeholder="Enter item sell price" name="sell_price" value="<?php
-                    if (isset($_SESSION['sell'])) {
-                        echo $_SESSION['sell'];
-                    }
-                ?>">
+                                                                                                                                if (isset($_SESSION['sell'])) {
+                                                                                                                                    echo $_SESSION['sell'];
+                                                                                                                                }
+                                                                                                                                ?>">
 
                 <small><?php
-                    if (isset($_SESSION['sellError'])) {
-                        echo $_SESSION['sellError'];
-                        unset($_SESSION['sellError']);
-                    }
-                ?></small>
+                        if (isset($_SESSION['sellError'])) {
+                            echo $_SESSION['sellError'];
+                            unset($_SESSION['sellError']);
+                        }
+                        ?></small>
 
                 <label for="qty">quantity</label>
-
                 <input type="number" class="form-control" id="qty" placeholder="1" name="quantity" />
-                <input class="form-control" type="file" name="img_path" /><br />
-                <small><?php 
-                if (isset($_SESSION['imageError'])) {
-                    echo $_SESSION['imageError'];
-                    unset($_SESSION['imageError']);
-                }
-                ?></small>
+
+                <label for="images">Upload Images</label>
+                <input class="form-control" type="file" name="img_path[]" multiple /><br />
+
+                <small><?php
+                        if (isset($_SESSION['imageError'])) {
+                            echo $_SESSION['imageError'];
+                            unset($_SESSION['imageError']);
+                        }
+                        ?></small>
 
             </div>
             <button type="submit" class="btn btn-primary" name="submit" value="submit">Submit</button>

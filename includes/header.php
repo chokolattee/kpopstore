@@ -24,7 +24,7 @@
             <nav class="top-nav">
                 <a href="/kpopstore">Home</a>
 
-                <?php if (isset($_SESSION['user_id'])): ?>
+                <!-- <?php if (isset($_SESSION['user_id'])): ?>
                     <?php if ($_SESSION['role'] === 'admin'): ?>
                         <a href="/kpopstore/artists/create.php">Artists</a>
                     <?php elseif ($_SESSION['role'] === 'user'): ?>
@@ -32,7 +32,7 @@
                     <?php endif; ?>
                 <?php else: ?>
                     <a href="/kpopstore/user/login.php">Artists</a>
-                <?php endif; ?>
+                <?php endif; ?> -->
 
                 <a href="#">Albums</a>
                 <a href="#">Merch</a>

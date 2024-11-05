@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../includes/config.php');
+
 $_SESSION['cost'] = trim($_POST['cost_price']);
 $_SESSION['sell'] = trim($_POST['sell_price']);
 $_SESSION['desc'] = trim($_POST['description']);
@@ -36,35 +37,46 @@ if (isset($_POST['submit'])) {
         $_SESSION['artistError'] = 'Please select an artist.';
         header("Location: create.php");
     }
+    $imagePaths = [];
+    if (isset($_FILES['img_path']) && !empty($_FILES['img_path']['name'][0])) {
+        foreach ($_FILES['img_path']['name'] as $key => $name) {
+            if ($_FILES['img_path']['type'][$key] == "image/jpeg" || $_FILES['img_path']['type'][$key] == "image/png") {
+                $source = $_FILES['img_path']['tmp_name'][$key];
+                $target = '../item/images/' . basename($name);
 
-    if (isset($_FILES['img_path'])) {
-        if ($_FILES['img_path']['type'] == "image/jpeg" || $_FILES['img_path']['type'] == "image/jpg" || $_FILES['img_path']['type'] == "image/png") {
-            $source = $_FILES['img_path']['tmp_name'];
-            $target = '../item/images/' . basename($_FILES['img_path']['name']);
-
-    
-            if (!move_uploaded_file($source, $target)) {
-                $_SESSION['imageError'] = "Couldn't copy the image file.";
+                if (move_uploaded_file($source, $target)) {
+                    $imagePaths[] = $target; // Collect uploaded image paths
+                } else {
+                    $_SESSION['imageError'] = "Couldn't copy the image file.";
+                    header("Location: create.php");
+                }
+            } else {
+                $_SESSION['imageError'] = "Wrong file type. Only JPG and PNG files are allowed.";
                 header("Location: create.php");
             }
-        } else {
-            $_SESSION['imageError'] = "Wrong file type. Only JPG and PNG files are allowed.";
-            header("Location: create.php");
         }
     } else {
-        $_SESSION['imageError'] = "Please upload an image file.";
+        $_SESSION['imageError'] = "Please upload at least one image file.";
         header("Location: create.php");
     }
 
-    $sql = "INSERT INTO item(description, category, cost_price, sell_price, img_path, artist_id) VALUES('{$desc}', '{$category}', '{$cost}', '{$sell}', '{$target}', '{$artist_id}')";
+    $imagePathsString = implode(',', $imagePaths);
+
+    $sql = "INSERT INTO item(description, category, cost_price, sell_price, artist_id) 
+            VALUES('{$desc}', '{$category}', '{$cost}', '{$sell}', '{$artist_id}')";
     $result = mysqli_query($conn, $sql);
 
+    $itemId = mysqli_insert_id($conn);
+
+foreach ($imagePaths as $imgPath) {
+    $sql_img = "INSERT INTO itemimg(item_id, img_path) VALUES('{$itemId}', '{$imgPath}')";
+    $result1 = mysqli_query($conn, $sql_img);
+}
 
     $q_stock = "INSERT INTO stock(item_id, quantity) VALUES(LAST_INSERT_ID(), '{$qty}')";
     $result2 = mysqli_query($conn, $q_stock);
 
-    if($result && $result2) {
-        
+    if($result && $result1 && $result2) {
         header("Location: index.php");
     }
  

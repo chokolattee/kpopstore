@@ -30,8 +30,8 @@ $artistsResult = mysqli_query($conn, $sql2);
                 <select class="form-select" id="artist" name="artist_id" required>
                     <option value="" disabled>Select an artist</option>
                     <?php while ($artist = mysqli_fetch_assoc($artistsResult)) { ?>
-                        <option value="<?php echo $artist['artist_id']; ?>" <?php if ($artist['artist_id'] == $row['artist_id']) echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($artist['artist_name']); ?>
+                        <option value="<?php echo $artist['artist_id']; ?>" <?php if (isset($row['artist_id']) && $artist['artist_id'] == $row['artist_id']) echo 'selected'; ?>>
+                            <?php echo($artist['artist_name']); ?>
                         </option>
                     <?php } ?>
                 </select>
@@ -45,8 +45,18 @@ $artistsResult = mysqli_query($conn, $sql2);
                 <label for="qty">Quantity</label>
                 <input type="number" class="form-control" id="qty" placeholder="1" name="quantity" value="<?php echo htmlspecialchars($row['quantity']); ?>" />
 
-                <input type="file" class="form-control" id="image" name="image" />
-                <img width='250' height='250' src="<?php echo htmlspecialchars($row['img_path']); ?>" />
+                <label for="images">Upload Images</label>
+                <input type="file" class="form-control" id="images" name="images[]" multiple />
+                <small class="form-text text-muted">Select multiple images to add or update existing ones.</small>
+                <div class="current-images">
+                    <?php
+                    $sql_images = "SELECT img_path FROM itemimg WHERE item_id = {$item_id}";
+                    $result_images = mysqli_query($conn, $sql_images);
+                    while ($img_row = mysqli_fetch_assoc($result_images)) {
+                        echo "<img src='" . htmlspecialchars($img_row['img_path']) . "' width='100' height='100' style='margin: 10px;' />";
+                    }
+                    ?>
+                </div>
             </div>
 
             <input type="hidden" name="itemId" value="<?php echo $row['item_id']; ?>" />
