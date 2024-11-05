@@ -1,6 +1,6 @@
 <?php
 session_start();
-print_r($_SESSION);
+// print_r($_SESSION);
 include('../includes/header.php');
 include('../includes/config.php');
 // if(! isset($_SESSION['user_id'])){

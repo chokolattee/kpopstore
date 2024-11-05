@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
                 $target = '../item/images/' . basename($name);
 
                 if (move_uploaded_file($source, $target)) {
-                    $imagePaths[] = $target; // Collect uploaded image paths
+                    $imagePaths[] = $target; 
                 } else {
                     $_SESSION['imageError'] = "Couldn't copy the image file.";
                     header("Location: create.php");
