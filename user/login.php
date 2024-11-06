@@ -1,90 +1,58 @@
-<!-- <?php
+<?php
 session_start();
+
+include("../includes/header.php");
 include("../includes/config.php");
 
 if (isset($_POST['submit'])) {
-
     $email = trim($_POST['email']);
-    $pass = trim($_POST['password']);
-
-    $sql_user = "SELECT user_id, email FROM user WHERE email=? AND password=? LIMIT 1";
-    $stmt_user = mysqli_prepare($conn, $sql_user);
-    mysqli_stmt_bind_param($stmt_user, 'ss', $email, $pass);
-    mysqli_stmt_execute($stmt_user);
-    mysqli_stmt_store_result($stmt_user);
-    mysqli_stmt_bind_result($stmt_user, $user_id, $email, $role);
-
-    // Check if a user exists
-    if (mysqli_stmt_num_rows($stmt_user) === 1) {
-        mysqli_stmt_fetch($stmt_user);
+    $pass = sha1(trim($_POST['password']));
+    $sql = "SELECT user_id, email, role FROM users WHERE email=? AND password=? LIMIT 1 ";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, 'ss', $email, $pass);
+    mysqli_stmt_execute($stmt);
+    // $result = mysqli_query($conn, $sql);
+    // var_dump($result);
+    mysqli_stmt_store_result($stmt);
+    mysqli_stmt_bind_result($stmt, $user_id, $email, $role);
+    if (mysqli_stmt_num_rows($stmt) === 1) {
+        mysqli_stmt_fetch($stmt);
+       
         $_SESSION['email'] = $email;
         $_SESSION['user_id'] = $user_id;
         $_SESSION['role'] = $role;
         header("Location: ../index.php");
     } else {
-        // If not found in users, check admins table
-        $sql_admin = "SELECT admin_id, email, role FROM admins WHERE email=? AND password=? LIMIT 1";
-        $stmt_admin = mysqli_prepare($conn, $sql_admin);
-        mysqli_stmt_bind_param($stmt_admin, 'ss', $email, $pass);
-        mysqli_stmt_execute($stmt_admin);
-        mysqli_stmt_store_result($stmt_admin);
-        mysqli_stmt_bind_result($stmt_admin, $admin_id, $email, $role);
-
-        if (mysqli_stmt_num_rows($stmt_admin) === 1) {
-            mysqli_stmt_fetch($stmt_admin);
-            $_SESSION['email'] = $email;
-            $_SESSION['user_id'] = $admin_id;
-            $_SESSION['role'] = $role;
-            header("Location: ../admin_dashboard.php");
-        } else {
-            $_SESSION['message'] = 'Wrong email or password';
-        }
+        $_SESSION['message'] = 'wrong email or password';
     }
 }
+
 ?>
+<div class="row col-md-8 mx-auto ">
+    <?php include("../includes/alert.php"); ?>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+            <input type="email" id="form2Example1" class="form-control" name="email" />
+            <label class="form-label" for="form2Example1">Email address</label>
+        </div>
 
-   <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="../includes/style/style.css">
-</head>
-<body>
-<header class="header">
-        <h1>HALLYU</h1>
-    </header>
-    
-    <div class="login-form-container">
-        <h2><b>Log In</b></h2>
-        <br>
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <input type="password" id="form2Example2" class="form-control" name="password" />
+            <label class="form-label" for="form2Example2">Password</label>
+        </div>
 
-        <?php if (isset($_SESSION['message'])): ?>
-            <div class="error-message">
-                <?php 
-                echo $_SESSION['message']; 
-                unset($_SESSION['message']); // Clear message after displaying
-                ?>
-            </div>
-        <?php endif; ?>
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4" name="submit">Sign in</button>
 
-        <form action="login.php" method="POST">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br>
-            
-            <button type="submit" name="submit">Log In</button>
-        </form>
-        <br>
-        <br>
-        <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
-    </div>
-</body>
-</html>
+        <!-- Register buttons -->
+        <div class="text-center">
+        <p>Not a member? <a href="register.php">Register</a></p>
+        </div>
+
+    </form>
+</div>
 <?php
 include("../includes/footer.php");
-?> -->
+?>

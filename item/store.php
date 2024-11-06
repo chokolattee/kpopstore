@@ -67,8 +67,6 @@ if (isset($_POST['submit'])) {
         header("Location: create.php");
     }
 
-    $imagePathsString = implode(',', $imagePaths);
-
     $sql = "INSERT INTO item(item_name, description, category, cost_price, sell_price, artist_id) 
             VALUES('{$itemname}', '{$desc}', '{$category}', '{$cost}', '{$sell}', '{$artist_id}')";
     $result = mysqli_query($conn, $sql);
