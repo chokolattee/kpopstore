@@ -24,8 +24,7 @@ $row = mysqli_fetch_assoc($result);
                 <input type="text" class="form-control" id="artistName" aria-describedby="emailHelp" placeholder="Enter name" name="artistName" value=<?php print "{$row['artist_name']} ;" ?> />
             <div class="form-group">
                 <label for="image">upload image</label>
-                <input type="file" class="form-control" id="image" placeholder="image"
-                    name="image">
+                <input type="file" class="form-control" id="image" placeholder="image" name="image" accept=".jpeg, .jpg, .png" required>
                     <img width='250' height='250' src= <?php print $row['img_path'] ?> />
             </div>
             <input type="hidden" name="artistId" value=<?php print $row['artist_id'] ?> />

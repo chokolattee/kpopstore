@@ -17,6 +17,7 @@ include('../includes/config.php');
                 <label for="artistName">Artist Name</label>
                 <input type="text" class="form-control" id="artistName" placeholder="Enter name"
                     name="artistName">
+                <label for="image">upload image</label>
                     <input class="form-control" type="file" name="img_path" accept=".jpeg, .jpg, .png" required /><br />
                 <small><?php 
                 if (isset($_SESSION['imageError'])) {

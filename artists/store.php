@@ -5,8 +5,7 @@ include('../includes/config.php');
 if (isset($_POST['submit'])) {
     $name = trim($_POST['artistName']);
 
-    if (isset($_FILES['img_path'])) {
-        // Validate file type
+    if (isset($_FILES['img_path']) && $_FILES['img_path']['error'] == 0) {
         $fileType = $_FILES['img_path']['type'];
         if ($fileType == "image/jpeg" || $fileType == "image/jpg" || $fileType == "image/png") {
             $source = $_FILES['img_path']['tmp_name'];

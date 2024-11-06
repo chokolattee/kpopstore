@@ -7,10 +7,10 @@ $item_id = (int) $_GET['id'];
 
 $sql1 = "SELECT * FROM item_details WHERE item_id = {$item_id}";
 $result1 = mysqli_query($conn, $sql1);
-$row = mysqli_fetch_assoc($result1);
+$row1 = mysqli_fetch_assoc($result1);
 
 $sql2 = "SELECT artist_id, artist_name FROM artists"; 
-$artistsResult = mysqli_query($conn, $sql2);
+$result2 = mysqli_query($conn, $sql2);
 
 
 ?>
@@ -20,33 +20,36 @@ $artistsResult = mysqli_query($conn, $sql2);
         <form action="update.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="name">Item Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter item name" name="description" value="<?php echo htmlspecialchars($row['description']); ?>" />
+                <input type="text" class="form-control" id="name" placeholder="Enter item name" name="name" value="<?php echo ($row1['item_name']); ?>" />
+
+                <label for="name">Item Description</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter item description" name="description" value="<?php echo ($row1['description']); ?>" />
 
                 <label for="category" class="form-label">Category</label>
                 <select class="form-select" id="category" name="category" required>
-                    <option value="album" <?php if (($row['category']) === 'album') echo 'selected'; ?>>Album</option>
-                    <option value="merchandise" <?php if (($row['category']) === 'merchandise') echo 'selected'; ?>>Merchandise</option>
+                    <option value="album" <?php if (($row1['category']) === 'album') echo 'selected'; ?>>Album</option>
+                    <option value="merchandise" <?php if (($row1['category']) === 'merchandise') echo 'selected'; ?>>Merchandise</option>
                 </select>
 
                 <label for="artist" class="form-label">Select Artist</label>
                 <select class="form-select" id="artist" name="artist_id" required>
                     <option value="" disabled>Select an artist</option>
-                    <?php while ($artist = mysqli_fetch_assoc($artistsResult)) { ?>
+                    <?php while ($artist = $row2 = mysqli_fetch_assoc($result2)) { ?>
                         <option value="<?php echo $artist['artist_id']; ?>" 
-                            <?php if (isset($row['artist_id']) && $artist['artist_id'] == $row['artist_id']) echo 'selected'; ?>>
+                            <?php if (isset($row1['artist_id']) && $artist['artist_id'] == $row1['artist_id']) echo 'selected'; ?>>
                             <?php echo($artist['artist_name']); ?>
                         </option>
                     <?php } ?>
                 </select>
 
                 <label for="cost">Cost Price</label>
-                <input type="text" class="form-control" id="cost" placeholder="Enter item cost price" name="cost_price" value="<?php echo ($row['cost_price']); ?>" />
+                <input type="text" class="form-control" id="cost" placeholder="Enter item cost price" name="cost_price" value="<?php echo ($row1['cost_price']); ?>" />
 
                 <label for="sell">Sell Price</label>
-                <input type="text" class="form-control" id="sell" placeholder="Enter item sell price" name="sell_price" value="<?php echo ($row['sell_price']); ?>" />
+                <input type="text" class="form-control" id="sell" placeholder="Enter item sell price" name="sell_price" value="<?php echo ($row1['sell_price']); ?>" />
 
                 <label for="qty">Quantity</label>
-                <input type="number" class="form-control" id="qty" name="quantity" value="<?php echo ($row['quantity']); ?>" />
+                <input type="number" class="form-control" id="qty" name="quantity" placeholder = 1 value="<?php echo ($row1['quantity']); ?>" />
 
                 <label for="images">Upload Images</label>
                 <input type="file" class="form-control" id="images" name="images[]" multiple />
@@ -64,7 +67,7 @@ $artistsResult = mysqli_query($conn, $sql2);
                 </div>
             </div>
 
-            <input type="hidden" name="itemId" value="<?php echo $row['item_id']; ?>" />
+            <input type="hidden" name="itemId" value="<?php echo $row1['item_id']; ?>" />
 
             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
             <a href="index.php" class="btn btn-secondary btn-sm" role="button" aria-disabled="true">Cancel</a>

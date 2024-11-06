@@ -1,5 +1,5 @@
 <?php
-session_start(); // Make sure the session is started
+session_start(); 
 include('../includes/header.php');
 require("../includes/config.php");
 
@@ -34,13 +34,13 @@ if (isset($_SESSION['message'])) {
             <?php
             $sql = "SELECT * FROM artists ORDER BY artist_id DESC";
             $result = mysqli_query($conn, $sql);
+            
 
             while ($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>
                         <td>{$row['artist_id']}</td>
                         <td>{$row['artist_name']}</td>
                         <td><img width='250' height='250' src='{$row['img_path']}' /></td>";
-                // Show action links only for admins
                 // if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
                     echo "<td>
                             <a href='edit.php?id={$row['artist_id']}'><i class='fa-regular fa-pen-to-square' aria-hidden='true' style='font-size:24px'></i></a>

@@ -5,13 +5,14 @@ $artist_id = (int)$_POST['artistId'];
 $name = trim($_POST['artistName']);
 $imgPath = null;
 
-if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-    if ($_FILES['image']['type'] == "image/png" || $_FILES['image']['type'] == "image/jpeg") {
+if (isset($_FILES['image'])) {
+    $fileType = $_FILES['image']['type'];
+    if ($fileType  == "image/png" || $fileType  == "image/jpeg") {
         $source = $_FILES['image']['tmp_name'];
         $target = '../artists/images/' . basename($_FILES['image']['name']);
 
         if (move_uploaded_file($source, $target)) {
-            $imgPath = $target; // Save the new image path
+            $imgPath = $target; 
         } else {
             die("Error: Couldn't copy the uploaded file.");
         }
@@ -25,7 +26,6 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
 $sql = "UPDATE artists SET artist_name = '{$name}'" . 
 ($imgPath ? ", img_path = '{$imgPath}'" : "") . 
        " WHERE artist_id = $artist_id";
-
 $result = mysqli_query($conn, $sql);
 
 if ($result) {

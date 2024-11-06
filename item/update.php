@@ -5,9 +5,10 @@ $item_id = (int)$_POST['itemId'];
 $cost = trim($_POST['cost_price']);
 $sell = trim($_POST['sell_price']);
 $desc = trim($_POST['description']);
+$name = trim($_POST['name']);
 $category = strtolower(trim($_POST['category']));
-$qty = (int)$_POST['quantity'];
-$artist_id = (int)$_POST['artist_id']; 
+$qty = $_POST['quantity'];
+$artist_id = $_POST['artist_id']; 
 
 $sql = "SELECT img_path FROM itemimg WHERE item_id = $item_id";
 $result = mysqli_query($conn, $sql);
@@ -18,21 +19,22 @@ while ($row = mysqli_fetch_assoc($result)) {
     $currentImgPaths[] = $row['img_path'];
 }
 
-$imagePaths = $currentImgPaths; 
+$imagePaths = $currentImgPaths;
 
-if (isset($_FILES['images']) && count($_FILES['images']['name']) > 0 && $_FILES['images']['name'][0] != '') {
+$imageCount = count($_FILES['images']['name']);
+
+if (isset($_FILES['images']) && $imageCount > 0 && $_FILES['images']['name'][0] != '') {
     foreach ($currentImgPaths as $imgPath) {
         if (file_exists($imgPath)) {
             unlink($imgPath); 
         }
     }
 
-
     $sql_oldimg = "DELETE FROM itemimg WHERE item_id = $item_id";
     mysqli_query($conn, $sql_oldimg);
 
     $imagePaths = [];  
-    for ($i = 0; $i < count($_FILES['images']['name']); $i++) {
+    for ($i = 0; $i < $imageCount; $i++) {
         if ($_FILES['images']['error'][$i] == UPLOAD_ERR_OK) {
             $imageType = $_FILES['images']['type'][$i];
             if ($imageType == "image/png" || $imageType == "image/jpeg") {
@@ -55,7 +57,7 @@ if (isset($_FILES['images']) && count($_FILES['images']['name']) > 0 && $_FILES[
     }
 }
 
-$sql_item = "UPDATE item SET description = '{$desc}', category = '{$category}', cost_price = '{$cost}', sell_price = '{$sell}', artist_id = '{$artist_id}' WHERE item_id = $item_id";
+$sql_item = "UPDATE item SET item_name = '{$name}', description = '{$desc}', category = '{$category}', cost_price = '{$cost}', sell_price = '{$sell}', artist_id = '{$artist_id}' WHERE item_id = $item_id";
 $result_item = mysqli_query($conn, $sql_item);
 
 foreach ($imagePaths as $imgPath) {

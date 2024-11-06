@@ -2,11 +2,12 @@
 require('../includes/config.php');
 $item_id = (int) $_GET['id'];
 
-$sql_get = "SELECT img_path FROM itemimg WHERE item_id = $item_id";
-$result_fetch = mysqli_query($conn, $sql_get);
+$sql= "SELECT img_path FROM itemimg WHERE item_id = $item_id";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_num_rows($result);
 
-if ($result_fetch && mysqli_num_rows($result_fetch) > 0) {
-    while ($row = mysqli_fetch_assoc($result_fetch)) {
+if ($result && $row > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
         $image_path = $row['img_path'];
         if (file_exists($image_path)) {
             unlink($image_path); 

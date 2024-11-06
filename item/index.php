@@ -13,7 +13,7 @@ else {
 
 
 if ($keyword) {
-    $sql = "SELECT * FROM item_details WHERE description LIKE '%{$keyword}%'";
+    $sql = "SELECT * FROM item_details WHERE item_name LIKE '%{$keyword}%'";
 } else {
     $sql = "SELECT * FROM item_details";
 }
@@ -29,6 +29,7 @@ $itemCount = mysqli_num_rows($result);
             <tr>
                 <th>Image</th>
                 <th>Item ID</th>
+                <th>Item Name</th>
                 <th>Description</th>
                 <th>Category</th>
                 <th>Sell Price</th>
@@ -51,6 +52,7 @@ $itemCount = mysqli_num_rows($result);
                 echo "</td>";
 
                 echo "<td>" . ($row['item_id']) . "</td>";
+                echo "<td>" . ($row['item_name']) . "</td>";
                 echo "<td>" . ($row['description']) . "</td>";
                 echo "<td>" . ($row['category']) . "</td>";
                 echo "<td>" . ($row['sell_price']) . "</td>";

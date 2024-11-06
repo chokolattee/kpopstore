@@ -8,6 +8,7 @@ include('../includes/config.php');
 $sql = "SELECT artist_id, artist_name FROM artists";
 $result = mysqli_query($conn, $sql);
 
+
 ?>
 
 <body>
@@ -15,11 +16,28 @@ $result = mysqli_query($conn, $sql);
 
         <form method="POST" action="store.php" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="name">Item Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter item name" name="description" value="<?php
-                                                                                                                            if (isset($_SESSION['desc']))
-                                                                                                                                echo $_SESSION['desc'];
-                                                                                                                            ?>" />
+            <label for="name">Item Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter item name" name="itemname" value="
+                <?php
+                if (isset($_SESSION['itemname']))
+                    echo $_SESSION['itemname'];
+                ?>" />
+
+                <small><?php
+                        if (isset($_SESSION['itemnameError'])) {
+                            echo $_SESSION['itemnameError'];
+                            unset($_SESSION['itemnameError']);
+                        }
+                        ?>
+                </small>
+
+
+                <label for="name">Item Description</label>
+                <input type="text" class="form-control" id="desc" placeholder="Enter item description" name="description" value="
+                <?php
+                if (isset($_SESSION['desc']))
+                    echo $_SESSION['desc'];
+                ?>" />
 
                 <small><?php
                         if (isset($_SESSION['descError'])) {
@@ -33,7 +51,7 @@ $result = mysqli_query($conn, $sql);
                 <select class="form-select" id="artist" name="artist_id" required>
                     <option value="" disabled selected>Select an artist</option>
                     <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                        <option value="<?php echo htmlspecialchars($row['artist_id']); ?>"><?php echo ($row['artist_name']); ?></option>
+                        <option value="<?php echo ($row['artist_id']); ?>"><?php echo ($row['artist_name']); ?></option>
                     <?php } ?>
                 </select>
 
@@ -44,10 +62,11 @@ $result = mysqli_query($conn, $sql);
                 </select>
 
                 <label for="cost">Cost Price</label>
-                <input type="text" class="form-control" id="cost" placeholder="Enter item cost price" name="cost_price" value="<?php
-                                                                                                                                if (isset($_SESSION['cost']))
-                                                                                                                                    echo $_SESSION['cost'];
-                                                                                                                                ?>">
+                <input type="text" class="form-control" id="cost" placeholder="Enter item cost price" name="cost_price" value="
+                <?php
+                if (isset($_SESSION['cost']))
+                    echo $_SESSION['cost'];
+                ?>">
                 <small><?php
                         if (isset($_SESSION['costError'])) {
                             echo $_SESSION['costError'];
@@ -56,11 +75,12 @@ $result = mysqli_query($conn, $sql);
                         ?></small>
 
                 <label for="sell">Sell Price</label>
-                <input type="text" class="form-control" id="sell" placeholder="Enter item sell price" name="sell_price" value="<?php
-                                                                                                                                if (isset($_SESSION['sell'])) {
-                                                                                                                                    echo $_SESSION['sell'];
-                                                                                                                                }
-                                                                                                                                ?>">
+                <input type="text" class="form-control" id="sell" placeholder="Enter item sell price" name="sell_price" value="
+                <?php
+                if (isset($_SESSION['sell'])) {
+                    echo $_SESSION['sell'];
+                }
+                ?>">
 
                 <small><?php
                         if (isset($_SESSION['sellError'])) {
