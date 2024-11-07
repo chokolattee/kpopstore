@@ -25,9 +25,9 @@ if (isset($_SESSION['message'])) {
                 <th>Artist ID</th>
                 <th>Artist Name</th>
                 <th>Image</th>
-                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                <!-- <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?> -->
                     <th>Action</th>
-                <?php endif; ?>
+                <!-- <?php endif; ?> -->
             </tr>
         </thead>
         <tbody>
