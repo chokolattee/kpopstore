@@ -29,7 +29,7 @@ include('./includes/config.php');
 // }
 
 
-$sql = "SELECT i.item_id AS itemId, i.description, ii.img_path,i.sell_price FROM item i INNER JOIN stock s ON i.item_id = s.item_id LEFT JOIN itemimg ii ON i.item_id = ii.item_id 
+$sql = "SELECT i.item_id AS itemId, i.item_name, i.description, ii.img_path,i.sell_price FROM item i INNER JOIN stock s ON i.item_id = s.item_id LEFT JOIN itemimg ii ON i.item_id = ii.item_id 
     GROUP BY i.item_id ORDER BY i.item_id ASC";
 $results = mysqli_query($conn, $sql);
 echo '<div class="products cat1"><h2>All Products</h2></div>'; 
@@ -37,13 +37,14 @@ echo '<div class="products" style="display: flex; flex-wrap: wrap;">';
 
 while ($row = mysqli_fetch_assoc($results)) {
     $itemId = ($row['itemId']);
+    $itemname = ($row['item_name']);
     $description = ($row['description']);
     $imgPath = ($row['img_path']);
     $sellPrice = ($row['sell_price']);
     
     echo '<div class="products-card">';
     echo "<img src='./item/$imgPath' alt='$description' />";
-    echo "<h3>$description</h3>";
+    echo "<h3>$itemname</h3>";
     echo "<p>₱$sellPrice</p>";
     echo '<form method="POST" action="cart_update.php">';
     echo "<input type='hidden' name='item_id' value='$itemId' />";
