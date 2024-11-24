@@ -5,6 +5,12 @@ $artist_id = (int)$_POST['artistId'];
 $name = trim($_POST['artistName']);
 $imgPath = null;
 
+if (!preg_match("/^[a-zA-Z0-9\s,.-]{1,50}$/", $name) && empty($name)) {
+    $_SESSION['nameError'] = 'Please input an artist name up to 50 characters';
+    header("Location: edit.php");
+    exit();
+}
+
 if (isset($_FILES['image'])) {
     $fileType = $_FILES['image']['type'];
     if ($fileType  == "image/png" || $fileType  == "image/jpeg") {

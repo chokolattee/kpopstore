@@ -1,8 +1,21 @@
 <?php
 session_start();
-include('../includes/header.php');
+
 include('../includes/config.php');
 
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = 'Please log in to access resources';
+    header("Location: /kpopstore/user/login.php");
+}
+
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT r.role_id FROM user u INNER JOIN role r ON u.role_id = r.role_id WHERE u.user_id = '$user_id' AND r.role_id = 1 LIMIT 1";
+$result= mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) == 0) {
+    $_SESSION['message'] = 'You must be logged in as admin to access this page.';
+    header("Location: /kpopstore/user/login.php");
+}
 
 if(isset($_GET['search'])) {
     $keyword = strtolower(trim($_GET['search']));
@@ -13,12 +26,13 @@ else {
 
 
 if ($keyword) {
-    $sql = "SELECT * FROM item_details WHERE item_name LIKE '%{$keyword}%'";
+    $sql1 = "SELECT * FROM item_details WHERE item_name LIKE '%{$keyword}%'";
 } else {
-    $sql = "SELECT * FROM item_details";
+    $sql1 = "SELECT * FROM item_details";
 }
-$result = mysqli_query($conn, $sql);
-$itemCount = mysqli_num_rows($result);
+$result1 = mysqli_query($conn, $sql1);
+$itemCount = mysqli_num_rows($result1);
+
 ?>
 
 <body>
@@ -33,7 +47,6 @@ $itemCount = mysqli_num_rows($result);
                 <th>Description</th>
                 <th>Category</th>
                 <th>Sell Price</th>
-                <th>Cost Price</th>
                 <th>Artist</th>
                 <th>Quantity</th>
                 <th>Actions</th>
@@ -41,7 +54,7 @@ $itemCount = mysqli_num_rows($result);
         </thead>
         <tbody>
             <?php
-            while ($row = mysqli_fetch_assoc($result)) {
+            while ($row = mysqli_fetch_assoc($result1)) {
                 echo "<tr>";
 
                 echo "<td>";
@@ -56,7 +69,6 @@ $itemCount = mysqli_num_rows($result);
                 echo "<td>" . ($row['description']) . "</td>";
                 echo "<td>" . ($row['category']) . "</td>";
                 echo "<td>" . ($row['sell_price']) . "</td>";
-                echo "<td>" . ($row['cost_price']) . "</td>";
                 echo "<td>" . ($row['artist_name']) . "</td>"; 
                 echo "<td>" . ($row['quantity']) . "</td>"; 
                 echo "<td>

@@ -1,15 +1,23 @@
 <?php
 session_start();
-// print_r($_SESSION);
 include('../includes/header.php');
 include('../includes/config.php');
-// if(! isset($_SESSION['user_id'])){
-//     $_SESSION['message'] = 'Login first to access resource';
-//     header("Location: ../user/login.php");
-    
-// }
-// else { 
-    ?>
+
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = 'Please log in to access resources';
+    header("Location: /kpopstore/user/login.php");
+}
+
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT r.role_id FROM user u INNER JOIN role r ON u.role_id = r.role_id WHERE u.user_id = '$user_id' AND r.role_id = 1 LIMIT 1";
+$result= mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) == 0) {
+    $_SESSION['message'] = 'You must be logged in as admin to access this page.';
+    header("Location: /kpopstore/user/login.php");
+}
+?>
+
 <body>
     <div class="container-fluid container-lg">
         <form action="store.php" method="POST" enctype="multipart/form-data" >

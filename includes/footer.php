@@ -1,8 +1,8 @@
 <footer class="footer">
     <hr>
-    <div class="container text-center">
-        <p>&copy; <?php echo date("Y"); ?> Hallyu. All rights reserved.</p>
-    </div>
+    <div class="footer">
+        <p style="text-align:center;">&copy; <?php echo date("Y"); ?> Hallyu. All rights reserved.</pp </div>
 </footer>
 </body>
+
 </html>

@@ -5,6 +5,12 @@ include('../includes/config.php');
 if (isset($_POST['submit'])) {
     $name = trim($_POST['artistName']);
 
+    if (!preg_match("/^[a-zA-Z0-9\s,.-]{1,50}$/", $name) && empty($name)) {
+        $_SESSION['nameError'] = 'Please input an artist name up to 50 characters';
+        header("Location: create.php");
+        exit();
+    }
+
     if (isset($_FILES['img_path']) && $_FILES['img_path']['error'] == 0) {
         $fileType = $_FILES['img_path']['type'];
         if ($fileType == "image/jpeg" || $fileType == "image/jpg" || $fileType == "image/png") {
