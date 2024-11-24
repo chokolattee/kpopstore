@@ -11,7 +11,11 @@ $result = mysqli_query($conn, $sql);
 <br>
 <br>
 <div class="signup-form-container" style="height:800px; width: 600px;">
-    <?php include("../includes/alert.php"); ?>
+    <?php include("../includes/alert.php"); 
+     if (isset($_SESSION['message'])) {
+        $_SESSION['message'];
+       unset($_SESSION['message']);
+       }?>
     <link rel="stylesheet" href="/kpopstore/includes/style.style.css">
     <form action="store.php" method="POST" enctype="multipart/form-data">
         <h2>WELCOME</h2>

@@ -3,6 +3,12 @@ session_start();
 include("../includes/config.php");
 include("../includes/header.php");
 
+if (!isset($_SESSION['user_id']) || !isset($_POST['orderinfo_id'])) {
+    $_SESSION['message'] = "You must be logged in as admin to access this page.";
+    header("Location: /kpopstore/user/login.php");
+    exit();
+}
+
 if (isset($_POST['submit'])) {
     $fname = ucwords(trim($_POST['fname']));
     $lname = ucwords(trim($_POST['lname']));

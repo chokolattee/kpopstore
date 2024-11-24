@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 include('../includes/config.php');
 
 if (!isset($_SESSION['user_id'])) {
@@ -36,7 +35,7 @@ $itemCount = mysqli_num_rows($result1);
 ?>
 
 <body>
-    <a href="create.php" class="btn btn-primary btn-lg" role="button">Add Item</a>
+    <a href="/kpopstore/item/create.php" class="btn btn-primary btn-lg" role="button">Add Item</a>
     <h2>Number of Items: <?= $itemCount ?></h2>
     <table class="table table-striped table-bordered">
         <thead>

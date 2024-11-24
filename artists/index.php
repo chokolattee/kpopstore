@@ -44,7 +44,7 @@ if (mysqli_num_rows($result) == 0) {
 
 <body>
     <h1>Artists</h1>
-    <a href="create.php" class="btn btn-primary mb-3">Add Artist</a>
+    <a href="/kpopstore/artists/create.php" class="btn btn-primary mb-3">Add Artist</a>
     <table class='table table-striped'>
         <thead>
             <tr>

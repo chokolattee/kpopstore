@@ -15,6 +15,7 @@ $result= mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) == 0) {
     $_SESSION['message'] = 'You must be logged in as admin to access this page.';
     header("Location: /kpopstore/user/login.php");
+    exit();
 }
 
 $sql = "SELECT role_id, description FROM role";

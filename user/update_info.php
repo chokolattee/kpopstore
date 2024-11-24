@@ -41,7 +41,7 @@ if ($result1) {
         if ($fileType == "image/png" || $fileType == "image/jpeg") {
             if (move_uploaded_file($_FILES['user_img']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $targetFile)) {
                 // Update the image path in the database
-                $imgPath = 'user/uploads/' . basename($_FILES['user_img']['name']);
+                $imgPath = '../user/uploads/'  . basename($_FILES['user_img']['name']);
                 $sql2 = "UPDATE user SET user_img = '$imgPath' WHERE user_id = '$user_id'";
 
                 if (mysqli_query($conn, $sql2)) {

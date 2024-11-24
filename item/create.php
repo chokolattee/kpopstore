@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/header.php');
+include('../includes/headera.php');
 include('../includes/config.php');
 
 if (!isset($_SESSION['user_id'])) {
@@ -104,9 +104,10 @@ $result = mysqli_query($conn, $sql);
 
             </div>
             <button type="submit" class="btn btn-primary" name="submit" value="submit">Submit</button>
-            <a href="index.php" role="button" class="btn btn-secondary">Cancel</a>
+            <a href="/kpopstore/admin/dashboard.php" role="button" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
+
     <?php
     include('../includes/footer.php');
     ?>

@@ -3,7 +3,7 @@ session_start();
 include("../includes/config.php");
 
 if (!isset($_SESSION['user_id']) || !isset($_POST['orderinfo_id'])) {
-    $_SESSION['message'] = "Please log in and select an order to update.";
+    $_SESSION['message'] = "You must be logged in as admin to access this page.";
     header("Location: /kpopstore/user/login.php");
     exit();
 }

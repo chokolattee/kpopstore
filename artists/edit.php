@@ -2,7 +2,6 @@
 session_start();
 include('../includes/header.php');
 require('../includes/config.php');
-
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['message'] = 'Please log in to access resources';
     header("Location: /kpopstore/user/login.php");
@@ -15,6 +14,7 @@ $result= mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) == 0) {
     $_SESSION['message'] = 'You must be logged in as admin to access this page.';
     header("Location: /kpopstore/user/login.php");
+    exit();
 }
 
 $artist_id = (int) $_GET['id'];
@@ -41,7 +41,7 @@ $row = mysqli_fetch_assoc($result);
 
 
             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-            <a href="index.php" class="btn btn-secondary btn-sm " role="button" aria-disabled="true">Cancel</a>
+            <a href="/kpopstore/admin/dashboard.php" class="btn btn-secondary btn-sm " role="button" aria-disabled="true">Cancel</a>
         </form>
     </div>
 </body>

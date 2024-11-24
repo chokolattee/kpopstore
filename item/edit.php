@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/header.php');
+include('../includes/headera.php');
 require('../includes/config.php');
 
 if (!isset($_SESSION['user_id'])) {
@@ -86,7 +86,7 @@ $result2 = mysqli_query($conn, $sql2);
             <input type="hidden" name="itemId" value="<?php echo $row1['item_id']; ?>" />
 
             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-            <a href="index.php" class="btn btn-secondary btn-sm" role="button" aria-disabled="true">Cancel</a>
+            <a href="/kpopstore/admin/dashboard.php" class="btn btn-secondary btn-sm" role="button" aria-disabled="true">Cancel</a>
         </form>
     </div>
 </body>

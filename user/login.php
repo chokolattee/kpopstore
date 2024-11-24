@@ -34,7 +34,12 @@ if (isset($_POST['submit'])) {
 
         $_SESSION['email'] = $email;
         $_SESSION['user_id'] = $user_id;
-        $_SESSION['role'] = $description; 
+        $_SESSION['role'] = $description;
+
+        if ($user_id == 1) {
+            header("Location: /kpopstore/admin/dashboard.php");
+            exit;
+        }
 
         header("Location: ../index.php");
         exit;
@@ -43,7 +48,6 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-
 <div class="login-form-container">
     <h2><b>Log In</b></h2>
     <br>

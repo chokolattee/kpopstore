@@ -1,25 +1,42 @@
 <?php
 session_start();
 
-include("../includes/header.php");
 include("../includes/config.php");
 include("../includes/alert.php");
 
 if (!isset($_SESSION['user_id'])) {
-  $_SESSION['message'] = 'Please log in to access resources';
-  header("Location: /kpopstore/user/login.php");
-  exit;
+    $_SESSION['message'] = 'Please log in to access resources';
+    header("Location: /kpopstore/user/login.php");
+    exit;
 }
 
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT r.role_id FROM user u INNER JOIN role r ON u.role_id = r.role_id WHERE u.user_id = '$user_id' AND r.role_id IN (1,2) LIMIT 1";
+
+$sql = "
+    SELECT r.role_id 
+    FROM user u 
+    INNER JOIN role r ON u.role_id = r.role_id 
+    WHERE u.user_id = '$user_id' AND r.role_id IN (1, 2) 
+    LIMIT 1
+";
+
 $result = mysqli_query($conn, $sql);
 
 if (mysqli_num_rows($result) == 0) {
-  $_SESSION['message'] = 'You must be logged in to access this page.';
-  header("Location: /kpopstore/user/login.php");
-  exit;
+    $_SESSION['message'] = 'You must be logged in to access this page.';
+    header("Location: /kpopstore/user/login.php");
+    exit;
 }
+
+$row = mysqli_fetch_assoc($result);
+$role_id = $row['role_id'];
+
+if ($role_id == 1) {
+    include("../includes/headera.php"); 
+} else {
+    include("../includes/header.php");
+}
+
 
 $sql1 = "SELECT * FROM user WHERE user_id = '$user_id'";
 $result = mysqli_query($conn, $sql1);

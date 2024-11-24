@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/header.php');
+include('../includes/headera.php');
 include('../includes/config.php');
 
 if (!isset($_SESSION['user_id'])) {
@@ -15,6 +15,7 @@ $result= mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) == 0) {
     $_SESSION['message'] = 'You must be logged in as admin to access this page.';
     header("Location: /kpopstore/user/login.php");
+    exit();
 }
 ?>
 
@@ -36,7 +37,7 @@ if (mysqli_num_rows($result) == 0) {
 
             </div>
             <button type="submit" class="btn btn-primary"name="submit" value="submit">Submit</button>
-            <a href="index.php" role="button" class="btn btn-secondary">Cancel</a>
+            <a href="/kpopstore/admin/dashboard.php" role="button" class="btn btn-secondary">Cancel</a>
         </form>
         </div>
 </body>
