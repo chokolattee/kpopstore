@@ -53,7 +53,15 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
+    $checkEmailQuery = "SELECT email FROM user WHERE email = '$email' LIMIT 1";
+    $checkEmailResult = mysqli_query($conn, $checkEmailQuery);
 
+    if (mysqli_num_rows($checkEmailResult) > 0) {
+        $_SESSION['message'] = 'Email is already in use';
+        header("Location: register.php");
+        exit();
+    }
+    
     if (isset($_FILES['user_img'])) {
         $allowed_types = ["image/jpeg", "image/jpg", "image/png"];
         if (in_array($_FILES['user_img']['type'], $allowed_types)) {
