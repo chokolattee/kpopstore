@@ -1,14 +1,11 @@
 <?php
+// session_start();
 include("../includes/config.php");
 include("../includes/header.php");
 
-// Fetch data from the database
+
 $query = "SELECT * FROM artists";
 $result = mysqli_query($conn, $query);
-
-if (!$result) {
-    die("Query failed: " . mysqli_error($conn));
-}
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +15,33 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artists</title>
-    <style>
+</head>
+
+<body>
+    <br>
+    <H1 style="text-align:center; font-size:40px;">ARTISTS</H1>
+    <div class="card-container">
+        <?php
+        // Loop through the fetched data and display it in cards
+        while ($row = mysqli_fetch_assoc($result)) {
+            
+            echo '<div class="card">';
+            
+            echo '<img src="' . ($row['img_path']) . '" alt="' . ($row['artist_name']) . '">';
+            echo '<div class="card-title">' . ($row['artist_name']) . '</div>';
+            echo '</div>';
+        }
+        ?>
+    </div>
+</body>
+
+</html>
+
+<?php
+include("../includes/footer.php");
+?>
+
+<style>
     /* Add basic styling for the card layout */
     .card-container {
         display: flex;
@@ -64,28 +87,3 @@ if (!$result) {
         font-weight: bold;
     }
     </style>
-</head>
-
-<body>
-    <br>
-    <H1 style="text-align:center; font-size:40px;">ARTISTS</H1>
-    <div class="card-container">
-        <?php
-        // Loop through the fetched data and display it in cards
-        while ($row = mysqli_fetch_assoc($result)) {
-            
-            echo '<div class="card">';
-            
-            echo '<img src="' . htmlspecialchars($row['img_path']) . '" alt="' . htmlspecialchars($row['artist_name']) . '">';
-            echo '<div class="card-title">' . htmlspecialchars($row['artist_name']) . '</div>';
-            echo '</div>';
-        }
-        ?>
-    </div>
-</body>
-
-</html>
-
-<?php
-include("../includes/footer.php");
-?>

@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('./includes/header.php');
 include('./includes/config.php');
+include('./includes/header.php');
 
 
 $sql = "SELECT id.item_id, id.item_name, id.description, ii.img_path, id.sell_price, id.quantity FROM item_details id
@@ -9,7 +9,6 @@ $sql = "SELECT id.item_id, id.item_name, id.description, ii.img_path, id.sell_pr
         GROUP BY id.item_id 
         ORDER BY id.item_id ASC";
 
-// Execute the query
 $results = mysqli_query($conn, $sql);
 
 echo '<section class="intro">
@@ -23,7 +22,6 @@ echo '<br><br> <div class="prod">
 <h2>ALL PRODUCTS</h2></div>';
 echo '<section class="products" style="display: flex; flex-wrap: wrap;">';
 
-// Loop through the results and generate product cards dynamically
 while ($row = mysqli_fetch_assoc($results)) {
     $itemId = $row['item_id'];
     $itemname = $row['item_name'];
@@ -38,7 +36,6 @@ while ($row = mysqli_fetch_assoc($results)) {
     echo "<p>Available: $quantity</p>";
     echo "<p>₱$sellPrice</p>";
 
-    // Add to Cart Button - Only enable if user is logged in
     if (isset($_SESSION['user_id'])) {
 
         $user_id = $_SESSION['user_id'];
@@ -94,180 +91,170 @@ echo '</section>';
 
 
 <style>
-    body {
-        background-color: #ddcae6;
-        font-family: Arial, sans-serif;
-        /* Default font for better readability */
-    }
+body {
+    background-color: #ddcae6;
+    font-family: Arial, sans-serif;
+}
 
-    /* Product Card Styling */
-    .products-card {
-        background-color: #E5D4FF;
-        border: 0.5px solid #E5CCFF;
-        border-radius: 10px;
-        margin: 10px;
-        padding: 15px;
-        text-align: center;
-        width: 200px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        /* Align content vertically */
-        justify-content: space-between;
-        /* Ensure even spacing */
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
+/* Product Card Styling */
+.products-card {
+    background-color: #E5D4FF;
+    border: 0.5px solid #E5CCFF;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 15px;
+    text-align: center;
+    width: 200px;
+    height: 380px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-    /* Product Cards Container */
-    .products {
-        display: flex;
-        justify-content: space-evenly;
-        /* Distribute cards evenly */
-        padding: 20px;
-        gap: 20px;
-        /* Adjust gap between cards */
-        flex-wrap: wrap;
-        /* Wrap cards on smaller screens */
-        border-top: 2px solid #D4A5FF;
-        border-bottom: 2px solid #D4A5FF;
-        margin-bottom: 20px;
-    }
+/* Product Cards Container */
+.products {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 20px;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-top: 2px solid #D4A5FF;
+    border-bottom: 2px solid #D4A5FF;
+    margin-bottom: 20px;
+}
 
-    /* Section Title Styling */
-    .prod h2 {
-        font-size: 45px;
-        text-align: center;
-        color: #5B148F;
-    }
+/* Section Title Styling */
+.prod h2 {
+    font-size: 45px;
+    text-align: center;
+    color: #5B148F;
+}
 
-    /* Image Styling */
-    .products-card img {
-        border-radius: 5px;
-        width: 100%;
-        /* Ensures image spans full width */
-        height: auto;
-        object-fit: cover;
-        /* Ensures uniform appearance */
-        margin-bottom: 10px;
-        max-height: 150px;
-        /* Limits image height */
-    }
+/* Image Styling */
+.products-card img {
+    border-radius: 5px;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    max-height: 150px;
+}
 
-    /* Product Name Styling */
-    .products-card h3 {
-        font-size: 18px;
-        font-weight: bold;
-        color: #5B148F;
-        margin: 5px 0;
-        font-family: 'Courier New', Courier, monospace;
-    }
+/* Product Name Styling */
+.products-card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #5B148F;
+    margin: 5px 0;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-    /* Price Styling */
-    .products-card p {
-        font-size: 14px;
-        color: #333;
-        margin: 10px 0 15px;
-        font-family: cursive;
-    }
+}
 
-    /* Buttons Container */
-    .edit-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
+/* Price Styling */
+.products-card p {
+    font-size: 14px;
+    color: #333;
+    margin: 10px 0 15px;
+    font-family: cursive;
+}
 
-    /* Buttons Styling */
-    .edit-buttons button,
-    .edit-buttons form button {
-        padding: 8px 15px;
-        font-size: 13px;
-        font-family: sans-serif;
-        background-color: #8c699a;
-        color: #FFF;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
+/* Buttons Container */
+.edit-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
 
-    .edit-buttons button:hover {
-        background-color: #8666ba;
-    }
+/* Buttons Styling */
+.edit-buttons button,
+.edit-buttons form button {
+    padding: 8px 15px;
+    font-size: 13px;
+    font-family: sans-serif;
+    background-color: #8c699a;
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-buttons button:hover {
+    background-color: #8666ba;
+}
 
 
 
-    /* Intro Section */
-    .intro h2 {
-        text-align: center;
-        font-size: 40px;
-        font-family: fantasy;
-        color: #5B148F;
-    }
+/* Intro Section */
+.intro h2 {
+    text-align: center;
+    font-size: 40px;
+    font-family: fantasy;
+    color: #5B148F;
+}
 
-    .intro h3 {
-        text-align: center;
-        font-family: monospace;
-        font-size: 30px;
-    }
+.intro h3 {
+    text-align: center;
+    font-family: monospace;
+    font-size: 30px;
+}
 
-    .intro p {
-        text-align: center;
-        font-size: 15px;
-        font-family: 'Bookman Old Style', serif;
-    }
+.intro p {
+    text-align: center;
+    font-size: 15px;
+    font-family: 'Bookman Old Style', serif;
+}
 
-    /* Navbar Styling */
+/* Authentication Buttons */
+.auth-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 0;
+}
 
+.auth-buttons button {
+    padding: 8px 15px;
+    font-size: 14px;
+    background-color: #8c699a;
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-    /* Authentication Buttons */
-    .auth-buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        margin-top: 0;
-    }
+.auth-buttons button:hover {
+    background-color: #8666ba;
+}
 
-    .auth-buttons button {
-        padding: 8px 15px;
-        font-size: 14px;
-        background-color: #8c699a;
-        color: #FFF;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+/* Button Margin Adjustment */
+.edit-buttons button+button {
+    margin-left: 10px;
+}
 
-    .auth-buttons button:hover {
-        background-color: #8666ba;
-    }
+/* Hover Effect for Product Card */
+.products-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
 
-    /* Button Margin Adjustment */
-    .edit-buttons button+button {
-        margin-left: 10px;
-    }
+form {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
 
-    /* Hover Effect for Product Card */
-    .products-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    form {
-        margin: 0;
-        /* Reset default margins for forms */
-        padding: 0;
-        display: inline-block;
-        /* Ensure it doesn't disrupt button alignment */
-    }
-
-    .button-container {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        /* Optional: adds spacing between buttons */
-    }
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 </style>
 
 </html>

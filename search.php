@@ -7,7 +7,7 @@ $keyword = strtolower(trim($_GET['query']));
 
 if (isset($_GET['query']) && !empty($keyword)) {
     $stmt = $conn->prepare("
-        SELECT i.item_id AS itemId, i.item_name, i.description, 
+        SELECT i.item_id AS itemId, i.item_name, i.description,  s.quantity,
                (SELECT img_path FROM itemimg WHERE item_id = i.item_id LIMIT 1) AS img_path, 
                i.sell_price 
         FROM item i
@@ -20,7 +20,7 @@ if (isset($_GET['query']) && !empty($keyword)) {
     $stmt->bind_param("s", $searchTerm);  
     $stmt->execute();
     $results = $stmt->get_result();  
-    echo '<div class="products" style="display: flex; flex-wrap: wrap;">'; 
+    echo '<section class="products" style="display: flex; flex-wrap: wrap;">';
 
     if ($results->num_rows > 0) {
         while ($row = $results->fetch_assoc()) {
@@ -29,10 +29,12 @@ if (isset($_GET['query']) && !empty($keyword)) {
             $description = $row['description'];
             $imgPath = $row['img_path'];  
             $sellPrice = $row['sell_price'];
+             $quantity = $row['quantity'];
           
             echo '<div class="products-card">';
             echo "<img src='./item/$imgPath' alt='$description' />";
             echo "<h3>$itemname</h3>";
+            echo "<p>Available: $quantity</p>";
             echo "<p>₱$sellPrice</p>";
             echo '
             <form action="view_itemdetails.php" method="POST" style="display:inline;">
@@ -60,7 +62,6 @@ if (isset($_GET['query']) && !empty($keyword)) {
 body {
     background-color: #ddcae6;
     font-family: Arial, sans-serif;
-    /* Default font for better readability */
 }
 
 /* Product Card Styling */
@@ -72,12 +73,11 @@ body {
     padding: 15px;
     text-align: center;
     width: 200px;
+    height: 380px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    /* Align content vertically */
     justify-content: space-between;
-    /* Ensure even spacing */
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -85,12 +85,9 @@ body {
 .products {
     display: flex;
     justify-content: space-evenly;
-    /* Distribute cards evenly */
     padding: 20px;
     gap: 20px;
-    /* Adjust gap between cards */
     flex-wrap: wrap;
-    /* Wrap cards on smaller screens */
     border-top: 2px solid #D4A5FF;
     border-bottom: 2px solid #D4A5FF;
     margin-bottom: 20px;
@@ -107,13 +104,10 @@ body {
 .products-card img {
     border-radius: 5px;
     width: 100%;
-    /* Ensures image spans full width */
-    height: auto;
+    height: 150px;
     object-fit: cover;
-    /* Ensures uniform appearance */
     margin-bottom: 10px;
     max-height: 150px;
-    /* Limits image height */
 }
 
 /* Product Name Styling */
@@ -121,15 +115,19 @@ body {
     font-size: 18px;
     font-weight: bold;
     color: #5B148F;
-    margin: 10px 0;
+    margin: 5px 0;
     font-family: 'Courier New', Courier, monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 
 /* Price Styling */
 .products-card p {
     font-size: 14px;
     color: #333;
-    margin: 5px 0 15px;
+    margin: 10px 0 15px;
     font-family: cursive;
 }
 
@@ -180,9 +178,6 @@ body {
     font-family: 'Bookman Old Style', serif;
 }
 
-/* Navbar Styling */
-
-
 /* Authentication Buttons */
 .auth-buttons {
     display: flex;
@@ -219,17 +214,13 @@ body {
 
 form {
     margin: 0;
-    /* Reset default margins for forms */
     padding: 0;
     display: inline-block;
-    /* Ensure it doesn't disrupt button alignment */
 }
 
-
-.button-row {
+.button-container {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* Optional: adds spacing between buttons */
 }
 </style>

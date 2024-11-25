@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/headera.php');
+
 include('../includes/config.php');
 
 if (!isset($_SESSION['user_id'])) {
@@ -15,7 +15,10 @@ $result= mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) == 0) {
     $_SESSION['message'] = 'You must be logged in as admin to access this page.';
     header("Location: /kpopstore/user/login.php");
+    exit();
 }
+
+include('../includes/headera.php');
 
 $sql = "SELECT artist_id, artist_name FROM artists";
 $result = mysqli_query($conn, $sql);
@@ -23,11 +26,15 @@ $result = mysqli_query($conn, $sql);
 ?>
 
 <body>
-    <div class="container">
-
-        <form method="POST" action="store.php" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="name">Item Name</label>
+<body style="background-color:#d8bfd8; margin: 0; min-height: 100vh;">
+    <div class="container-fluid container-lg" style="width: 50%; background-color: #f3e4f7; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0,
+    0, 0.2); margin: 20px auto;">
+        <div style="text-align: center; padding: 20px; background-color: #f3e4f7;">
+            <h1 style="font-size: 40px; color: #6a0572;">CREATE ITEM</h1>
+        </div>
+        <?php include("../includes/alert.php"); ?>
+        <form action="store.php" method="POST" enctype="multipart/form-data">
+        <label for="name">Item Name</label>
                 <input type="text" class="form-control" id="name" placeholder="Enter item name" name="itemname" value="
                 <?php
                 if (isset($_SESSION['itemname']))
@@ -102,9 +109,12 @@ $result = mysqli_query($conn, $sql);
                         }
                         ?></small>
 
+</div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" class="btn btn-primary" name="submit" value="submit"
+                    style="margin-right: 10px;">Submit</button>
+                <a href="index.php" role="button" class="btn btn-secondary">Cancel</a>
             </div>
-            <button type="submit" class="btn btn-primary" name="submit" value="submit">Submit</button>
-            <a href="/kpopstore/admin/dashboard.php" role="button" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 

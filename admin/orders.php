@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include("../includes/config.php");
 
 
@@ -55,7 +56,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT r.role_id FROM user u INNER JOIN role r ON u.role_id = r.role_id WHERE u.user_id = '$user_id' AND r.role_id = 1 LIMIT 1";
-$result= mysqli_query($conn, $sql);
+$result = mysqli_query($conn, $sql);
 
 if (mysqli_num_rows($result) == 0) {
     $_SESSION['message'] = 'You must be logged in as admin to access this page.';
@@ -63,11 +64,15 @@ if (mysqli_num_rows($result) == 0) {
     exit();
 }
 
+include("../includes/headera.php");
+
 $sql = "SELECT DISTINCT orderinfo_id, full_name, date_placed, status, shipping_rate, date_shipped, date_received 
-        FROM orderdetails";
+        FROM orderdetails ORDER BY orderinfo_id DESC";
 $result = mysqli_query($conn, $sql);
+include("../includes/alert.php");
 
 echo "<div class='order-container'>";
+echo "<h1>ORDER MANAGEMENT </h1>";
 echo "<div class='d-flex justify-content-center row'>";
 echo "<div class='col-md-10'>";
 echo "<div class='table-responsive table-borderless'>";
@@ -95,8 +100,10 @@ if (mysqli_num_rows($result) > 0) {
         $userName = $order['full_name'];
         $orderStatus = $order['status'];
         $shippingRate = $order['shipping_rate'];
-        $dateShipped = $order['date_shipped'] ? date('M d, Y', strtotime($order['date_shipped'])) : 'Not Shipped';
-        $dateReceived = $order['date_received'] ? date('M d, Y', strtotime($order['date_received'])) : 'Not Received';
+        $dateShipped = $order['date_shipped'];
+        $date_shipped = $dateShipped ? date('M d, Y', strtotime($dateShipped)) : null; 
+        $dateReceived = $order['date_received'];
+        $date_received = $dateReceived ? date('M d, Y', strtotime($dateReceived)) : null; 
         $datePlaced = date('M d, Y', strtotime($order['date_placed']));
 
         $sql_items = "SELECT items, quantities, sell_prices, total_amount 
@@ -113,7 +120,7 @@ if (mysqli_num_rows($result) > 0) {
             $items[] = $item['items'];
             $quantities[] = $item['quantities'];
             $sellPrices[] = "₱" . $item['sell_prices'];
-            $finalTotal = $item['total_amount']; 
+            $finalTotal = $item['total_amount'];
         }
 
         $itemsList = implode("<br>", $items);
@@ -121,23 +128,42 @@ if (mysqli_num_rows($result) > 0) {
         $sellPricesList = implode("<br>", $sellPrices);
 
         echo "<tr>";
-        echo "<td>$orderId</td>"; 
-        echo "<td>$userName</td>"; 
-        echo "<td>$itemsList</td>"; 
-        echo "<td>$quantitiesList</td>"; 
+        echo "<td>$orderId</td>";
+        echo "<td>$userName</td>";
+        echo "<td>$itemsList</td>";
+        echo "<td>$quantitiesList</td>";
         echo "<td>$sellPricesList</td>";
-        echo "<td>$datePlaced</td>";  
-        echo "<td>$orderStatus</td>"; 
-        echo "<td>₱" . $finalTotal . "</td>";  
-        echo "<td>$dateShipped</td>"; 
-        echo "<td>$dateReceived</td>"; 
+        echo "<td>$datePlaced</td>";
+        echo "<td>$orderStatus</td>";
+        echo "<td>₱" . $finalTotal . "</td>";
+        echo "<td>";
+        echo $date_shipped ? $date_shipped : 'Not Shipped';
+        echo "</td>";
+        echo "<td>";
+        echo $date_received ? $date_received : 'Not Received';
+        echo "</td>";
 
-            echo "<td>
-                  <form action='edit_order.php' method='POST'>
-    <input type='hidden' name='orderinfo_id' value='$orderId'>
-    <button type='submit' class='btn btn-primary btn-sm'>Edit</button>
-</form>
-                  </td>";
+        echo "<td>";
+        if ($orderStatus !== 'Cancelled' && !$date_shipped) {
+            echo "<form action='edit_order.php' method='POST'>";
+            echo "<input type='hidden' name='orderinfo_id' value='$orderId'>";
+            echo "<button type='submit' class='btn btn-primary btn-sm'>Edit</button>";
+            echo "</form>";
+        } elseif ($date_shipped && !$date_received) {
+            echo "<button class='btn btn-info btn-sm' disabled>Shipped</button>";
+        } elseif ($date_shipped && $date_received) {
+            echo "<button class='btn btn-success btn-sm' disabled>Received</button>";
+        } else {
+            echo "<button class='btn btn-secondary btn-sm' disabled>Cancelled</button>";
+        }
+        echo "</td>";
+        
+        echo "</td>";
+        
+        echo "</tr>";
+        
+        echo "</td>";
+
         echo "</tr>";
     }
 } else {
@@ -155,75 +181,73 @@ include("../includes/footer.php");
 ?>
 
 
-
-
-
-
 <style>
-.order-container {
-    margin-top: 50px;
-    margin-bottom: 50px;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-}
+    .order-container {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        background-color: #EEDEF0;
+        padding: 20px;
+        border-radius: 8px;
+    }
 
-/* Table styling */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 8px;
-}
+    .order-container h1 {
+        text-align: center;
+        font-size: 40px;
+    }
 
-.table th,
-.table td {
-    padding: 12px 15px;
-    text-align: center;
-    font-size: 14px;
-    border-bottom: 1px solid #ddd;
-}
+    /* Table styling */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+    }
 
-.table th {
-    background-color: #4CAF50;
-    color: white;
-}
+    .table th,
+    .table td {
+        padding: 12px 15px;
+        text-align: center;
+        font-size: 14px;
+        border-bottom: 1px solid #ddd;
+    }
 
-.table td {
-    background-color: #ffffff;
-}
+    .table th {
+        background-color: #dab1da;
+        color: white;
+    }
 
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: #f2f2f2;
-}
+    .table td {
+        background-color: #ffffff;
+    }
 
-/* Responsive table design */
-.table-responsive {
-    overflow-x: auto;
-}
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f2f2f2;
+    }
 
-.table-body {
-    font-family: Arial, sans-serif;
-}
+    /* Ensure the table fits within the container */
+    .table-responsive {
+        width: 100%;
+        display: block;
+    }
 
-/* Style for 'No orders found' */
-.text-center {
-    font-size: 16px;
-    color: #888;
-    padding: 20px;
-}
+    /* Style for 'No orders found' */
+    .text-center {
+        font-size: 16px;
+        color: #888;
+        padding: 20px;
+    }
 
-/* Extra styling for the order history items */
-td {
-    font-size: 14px;
-}
+    /* Extra styling for the order history items */
+    td {
+        font-size: 14px;
+    }
 
-/* Spacing adjustments */
-.d-flex {
-    display: flex;
-    justify-content: center;
-}
+    /* Spacing adjustments */
+    .d-flex {
+        display: flex;
+        justify-content: center;
+    }
 
-.row {
-    margin-bottom: 30px;
-}
+    .row {
+        margin-bottom: 30px;
+    }
 </style>

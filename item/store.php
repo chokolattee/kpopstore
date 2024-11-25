@@ -97,7 +97,7 @@ if (isset($_POST['submit'])) {
     }
 
     $sql = "INSERT INTO item (item_name, description, category_id, sell_price, artist_id) 
-            VALUES ('{$itemname}', '{$desc}', '{$category_id}', '{$sell}', '{$artist_id}')";
+            VALUES ('{$itemname}', \"{$desc}\", '{$category_id}', '{$sell}', '{$artist_id}')";
     $result = mysqli_query($conn, $sql);
 
     if ($result) {

@@ -8,18 +8,20 @@ if (isset($_POST['submit'])) {
     $rating = $_POST['rating'];  
     $comment = $_POST['review']; 
   
-    $badWords = ['damn', 'hell', 'ass', 'fucking', 'kingina', 'bullshit', 'bitch', 'crap', 'dick', 'fuck', 'shit', 'bastard', 'nigga', 'slut', 'tangina'];
+    $badWords = ['damn', 'hell', 'ass', 'fucking', 'kingina', 'bullshit', 'bitch', 'crap', 'dick', 'fuck', 'shit', 'bastard', 'nigga', 'slut', 'tangina',
+                'yawa', 'kupal', 'buang', 'boang', 'taena', 'taenamo', 'pakshet', 'pakshit', 'gago', 'leche', 'punyeta', 'lintek', 'peste', 'tanga', 'gaga',
+                'puta', 'putragis', 'lintik', 'shet','pucha' ];
 
-foreach ($badWords as $badWord) {
-    $pattern = '/\b' . preg_quote($badWord, '/') . '\b/i';  
-    $replacement = str_repeat('*', strlen($badWord)); 
-    $comment = preg_replace($pattern, $replacement, $comment); 
-}
+                foreach ($badWords as $badWord) {
+                    $pattern = '/' . preg_quote($badWord, '/') . '/i'; 
+                    $replacement = str_repeat('*', strlen($badWord));  
+                    $comment = preg_replace($pattern, $replacement, $comment); 
+                }
 
     $imagePaths = [];
     if (isset($_FILES['img_path']) && !empty($_FILES['img_path']['name'][0])) {
         foreach ($_FILES['img_path']['name'] as $key => $name) {
-            if ($_FILES['img_path']['type'][$key] == "image/jpeg" || $_FILES['img_path']['type'][$key] == "image/png") {
+            if ($_FILES['img_path']['type'][$key] == "image/jpeg" || $_FILES['img_path']['type'][$key] == "image/png" || $_FILES['img_path']['type'][$key] == "image/jpg") {
                 $source = $_FILES['img_path']['tmp_name'][$key];
                 $target = '../review/images/' . basename($name);
 
@@ -28,12 +30,12 @@ foreach ($badWords as $badWord) {
                     $imagePaths[] = $target; 
                 } else {
                     $_SESSION['imageError'] = "Couldn't copy the image file.";
-                    header("Location: view_order.php");
+                    header("Location: /kpopstore/view_order.php");
                     exit();
                 }
             } else {
                 $_SESSION['imageError'] = "Wrong file type. Only JPG and PNG files are allowed.";
-                header("Location: view_order.php");
+                header("Location: /kpopstore/view_order.php");
                 exit();
             }
         }
@@ -59,3 +61,4 @@ foreach ($badWords as $badWord) {
     }
 }
 ?>
+

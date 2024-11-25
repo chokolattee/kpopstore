@@ -1,8 +1,20 @@
 <?php
-// Start the session
+include("config.php");
 
-// Simulate user login status (replace this with your actual authentication logic)
 $user_logged_in = isset($_SESSION['user_id']);
+
+$is_admin = false; 
+
+if ($user_logged_in) {
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT r.role_id FROM user u INNER JOIN role r ON u.role_id = r.role_id WHERE u.user_id = '$user_id' LIMIT 1";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $is_admin = ($row['role_id'] == 1);
+    }
+}
 ?>
 
 
@@ -22,11 +34,14 @@ $user_logged_in = isset($_SESSION['user_id']);
 <body>
     <header class="header">
         <div class="auth-buttons">
-            <button onclick=" window.location.href='/kpopstore/user/login.php'">Log
-                In</button>
-            <button onclick=" window.location.href='/kpopstore/user/register.php'">Sign Up</button>
-            <?php if ($user_logged_in): ?>
-            <button onclick="window.location.href='/kpopstore/user/logout.php'">Logout</button>
+        <?php if (!$user_logged_in): ?>
+                <button onclick="window.location.href='/kpopstore/user/login.php'">Log In</button>
+                <button onclick="window.location.href='/kpopstore/user/register.php'">Sign Up</button>
+            <?php else: ?>
+                <button onclick="window.location.href='/kpopstore/user/logout.php'">Logout</button>
+                <?php if ($is_admin): ?>
+                    <button onclick="window.location.href='/kpopstore/admin/dashboard.php'">Dashboard</button>
+                <?php endif; ?>
             <?php endif; ?>
 
             <button class=" cart-button" onclick="window.location.href='/kpopstore/view_cart.php'">

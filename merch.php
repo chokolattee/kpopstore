@@ -3,8 +3,6 @@ session_start();
 include('./includes/header.php');
 include('./includes/config.php');
 
-
-// SQL query to fetch only albums
 $sql = "SELECT id.category,id.item_id, id.item_name, id.description, ii.img_path, id.sell_price, id.quantity 
         FROM item_details id
         INNER JOIN itemimg ii ON ii.item_id = id.item_id 
@@ -15,7 +13,6 @@ $sql = "SELECT id.category,id.item_id, id.item_name, id.description, ii.img_path
 
 
 
-// Execute the query
 $results = mysqli_query($conn, $sql);
 
 
@@ -23,7 +20,6 @@ echo '<br><br> <div class="prod">
 <h2>Merchandise</h2></div>';
 echo '<section class="products" style="display: flex; flex-wrap: wrap;">';
 
-// Loop through the results and generate album cards dynamically
 while ($row = mysqli_fetch_assoc($results)) {
     $itemId = $row['item_id'];
     $itemname = $row['item_name'];
@@ -38,7 +34,6 @@ echo "<h3>$itemname</h3>";
 echo "<p>Available: $quantity</p>";
 echo "<p>₱$sellPrice</p>";
 
-// Add to Cart Button - Only enable if user is logged in
 if (isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $sql_role_check = "SELECT r.role_id FROM user u INNER JOIN role r ON u.role_id = r.role_id WHERE u.user_id = '$user_id'
@@ -87,7 +82,6 @@ echo '</section>';
 body {
     background-color: #ddcae6;
     font-family: Arial, sans-serif;
-    /* Default font for better readability */
 }
 
 /* Product Card Styling */
@@ -99,12 +93,11 @@ body {
     padding: 15px;
     text-align: center;
     width: 200px;
+    height: 450px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    /* Align content vertically */
     justify-content: space-between;
-    /* Ensure even spacing */
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -112,12 +105,9 @@ body {
 .products {
     display: flex;
     justify-content: space-evenly;
-    /* Distribute cards evenly */
     padding: 20px;
     gap: 20px;
-    /* Adjust gap between cards */
     flex-wrap: wrap;
-    /* Wrap cards on smaller screens */
     border-top: 2px solid #D4A5FF;
     border-bottom: 2px solid #D4A5FF;
     margin-bottom: 20px;
@@ -134,13 +124,10 @@ body {
 .products-card img {
     border-radius: 5px;
     width: 100%;
-    /* Ensures image spans full width */
     height: auto;
     object-fit: cover;
-    /* Ensures uniform appearance */
     margin-bottom: 10px;
     max-height: 150px;
-    /* Limits image height */
 }
 
 /* Product Name Styling */
@@ -246,17 +233,14 @@ body {
 
 form {
     margin: 0;
-    /* Reset default margins for forms */
     padding: 0;
     display: inline-block;
-    /* Ensure it doesn't disrupt button alignment */
 }
 
 .button-container {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* Optional: adds spacing between buttons */
 }
 </style>
 

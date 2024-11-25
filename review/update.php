@@ -11,11 +11,14 @@ $new_comment = $_POST['review'];
 $new_rating = $_POST['rating'];
 $new_images = $_FILES['img_path'];
 
-$badWords = ['damn', 'hell', 'ass', 'bitch', 'crap', 'dick', 'fuck', 'shit', 'bastard', 'nigga', 'slut', 'tangina'];
+$badWords = ['damn', 'hell', 'ass', 'fucking', 'kingina', 'bullshit', 'bitch', 'crap', 'dick', 'fuck', 'shit', 'bastard', 'nigga', 'slut', 'tangina',
+'yawa', 'kupal', 'buang', 'boang', 'taena', 'taenamo', 'pakshet', 'pakshit', 'gago', 'leche', 'punyeta', 'lintek', 'peste', 'tanga', 'gaga',
+'puta', 'putragis', 'lintik', 'shet','pucha' ];
+
 
 foreach ($badWords as $badWord) {
-    $pattern = '/\b' . preg_quote($badWord, '/') . '\b/i';  
-    $replacement = str_repeat('*', strlen($badWord)); 
+    $pattern = '/' . preg_quote($badWord, '/') . '/i'; 
+    $replacement = str_repeat('*', strlen($badWord));  
     $new_comment = preg_replace($pattern, $replacement, $new_comment); 
 }
 
@@ -41,6 +44,7 @@ if (!empty($new_images['name'][0])) {
     $uploaded_images = [];
     $upload_dir = '../review/images/';
     foreach ($new_images['tmp_name'] as $key => $tmp_name) {
+        if ($_FILES['img_path']['type'][$key] == "image/jpeg" || $_FILES['img_path']['type'][$key] == "image/png" || $_FILES['img_path']['type'][$key] == "image/jpg") {
         $image_name = basename($new_images['name'][$key]);
         $target_path = $upload_dir . $image_name;
 
@@ -50,6 +54,11 @@ if (!empty($new_images['name'][0])) {
 
             $sql_insert = "INSERT INTO reviewimg (review_id, img_path) VALUES ($review_id, '$full_path')";
             $result_insert = mysqli_query($conn, $sql_insert);
+        }
+        } else {
+            $_SESSION['imageError'] = "Wrong file type. Only JPG and PNG files are allowed.";
+            header("Location: /kpopstore/view_order.php");
+            exit();
         }
     }
 }

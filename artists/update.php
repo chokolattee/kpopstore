@@ -1,53 +1,39 @@
 <?php
 require('../includes/config.php');
 
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['message'] = 'Please log in to access resources';
-    header("Location: /kpopstore/user/login.php");
-}
-
-$user_id = $_SESSION['user_id'];
-$sql = "SELECT r.role_id FROM user u INNER JOIN role r ON u.role_id = r.role_id WHERE u.user_id = '$user_id' AND r.role_id = 1 LIMIT 1";
-$result= mysqli_query($conn, $sql);
-
-if (mysqli_num_rows($result) == 0) {
-    $_SESSION['message'] = 'You must be logged in as admin to access this page.';
-    header("Location: /kpopstore/user/login.php");
-    exit();
-}
-
 
 $artist_id = (int)$_POST['artistId'];
 $name = trim($_POST['artistName']);
 $imgPath = null;
 
-if (!preg_match("/^[a-zA-Z0-9\s,.-]{1,50}$/", $name) && empty($name)) {
-    $_SESSION['nameError'] = 'Please input an artist name up to 50 characters';
-    header("Location: edit.php");
+if (empty($name) || !preg_match("/^[a-zA-Z0-9\s,.-]{1,50}$/", $name)) {
+    $_SESSION['nameError'] = 'Please input a valid artist name (up to 50 characters)';
+    header("Location: edit.php?id={$artist_id}");
     exit();
 }
 
-if (isset($_FILES['image'])) {
+if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) {
     $fileType = $_FILES['image']['type'];
-    if ($fileType  == "image/png" || $fileType  == "image/jpeg") {
+    if ($fileType == "image/png" || $fileType == "image/jpeg") {
         $source = $_FILES['image']['tmp_name'];
         $target = '../artists/images/' . basename($_FILES['image']['name']);
 
         if (move_uploaded_file($source, $target)) {
             $imgPath = $target; 
         } else {
-            die("Error: Couldn't copy the uploaded file.");
+            die("Error: Couldn't upload the file.");
         }
     } else {
-        $_SESSION['imageError'] = "Wrong file type. Only JPG and PNG are allowed.";
+        $_SESSION['imageError'] = "Wrong file type. Only JPG and PNG files are allowed.";
         header("Location: edit.php?id={$artist_id}");
         exit();
     }
 }
 
 $sql = "UPDATE artists SET artist_name = '{$name}'" . 
-($imgPath ? ", img_path = '{$imgPath}'" : "") . 
+       ($imgPath ? ", img_path = '{$imgPath}'" : "") . 
        " WHERE artist_id = $artist_id";
+
 $result = mysqli_query($conn, $sql);
 
 if ($result) {

@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("../includes/config.php");
 
+include("../includes/config.php");
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['message'] = 'Please log in to access resources';
@@ -19,6 +19,7 @@ if (mysqli_num_rows($result) == 0) {
     header("Location: /kpopstore/user/login.php");
     exit;
 }
+include("../includes/headera.php");
 
 if (isset($_POST['change_role']) && isset($_POST['target_user_id']) && isset($_POST['new_role_id'])) {
     $target_user_id = $_POST['target_user_id'];
@@ -64,7 +65,6 @@ $sql = "SELECT u.user_id, CONCAT(u.fname, ' ', u.lname) AS name, u.email, r.desc
         INNER JOIN user_status s ON u.status_id = s.status_id";
 $result = mysqli_query($conn, $sql);
 
-
 $role_sql = "SELECT * FROM role";
 $role_result = mysqli_query($conn, $role_sql);
 $roles = [];
@@ -80,89 +80,155 @@ while ($status = mysqli_fetch_assoc($status_result)) {
 }
 ?>
 
-<h2>User Management</h2>
-<?php include("../includes/alert.php"); ?>
+<div class="container">
+<h1 class="text-center mb-4">User Management</h1>
+    <?php include("../includes/alert.php"); ?>
 
-<table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row = mysqli_fetch_assoc($result)): ?>
+            <tr>
+                <td><?= $row['user_id'] ?></td>
+                <td><?= $row['name'] ?></td>
+                <td><?= $row['email'] ?></td>
+                <td><?= $row['role'] ?></td>
+                <td><?= $row['status_name'] ?></td>
+                <td>
+                    <div class="button-group">
+                        <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" class="form-inline">
+                            <input type="hidden" name="target_user_id" value="<?= $row['user_id'] ?>">
+                            <select name="new_role_id" class="form-control">
+                                <?php foreach ($roles as $role): ?>
+                                <option value="<?= $role['role_id'] ?>"
+                                    <?= $role['role_id'] == $row['role_id'] ? 'selected' : '' ?>>
+                                    <?= $role['description'] ?>
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <button type="submit" name="change_role" class="btn btn-info btn-sm">Update Role</button>
+                        </form>
 
-    <thead>
-        <tr>
-            <th style=" width: 50px; background-color:#D8BFD8;">ID</th>
-            <th style="width: 150px;background-color:#D8BFD8;">Name</th>
-            <th style="width: 100px;background-color:#D8BFD8;">Email</th>
-            <th style="width: 50px;background-color:#D8BFD8;">Role</th>
-            <th style="width: 50px;background-color:#D8BFD8;">Status</th>
-            <th style="width: 200px;background-color:#D8BFD8;">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php while ($row = mysqli_fetch_assoc($result)): ?>
-        <tr>
-            <td style="background-color:#F1EAFF" ;><?= $row['user_id'] ?></td>
-            <td style="background-color:#F1EAFF"><?= $row['name'] ?></td>
-            <td style="background-color:#F1EAFF"><?= $row['email'] ?></td>
-            <td style="background-color:#F1EAFF"><?= $row['role'] ?></td>
-            <td style="background-color:#F1EAFF"><?= $row['status_name'] ?></td>
-            <td>
+                        <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" class="form-inline">
+                            <input type="hidden" name="target_user_id" value="<?= $row['user_id'] ?>">
+                            <select name="new_status_id" class="form-control">
+                                <?php foreach ($statuses as $status): ?>
+                                <option value="<?= $status['status_id'] ?>"
+                                    <?= $status['status_id'] == $row['status_id'] ? 'selected' : '' ?>>
+                                    <?= $status['status_name'] ?>
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <button type="submit" name="change_status" class="btn btn-primary btn-sm">Update
+                                Status</button>
+                        </form>
 
-                <div class="button-group">
-                    <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" style="display:inline;">
-                        <input type="hidden" name="target_user_id" value="<?= $row['user_id'] ?>">
-                        <select name="new_status_id">
-                            <?php foreach ($roles as $role): ?>
-                            <option value="<?= $role['role_id'] ?>"
-                                <?= $role['role_id'] == $row['role_id'] ? 'selected' : '' ?>>
-                                <?= $role['description'] ?>
-                            </option>
-                            <?php endforeach; ?>
-                        </select>
-                        <button type="submit" name="change_role" class="btn btn-info btn-sm" style="margin-left:50px;">
-                            Update
-                            Role</button>
-                    </form>
+                        <form action="delete.php" method="POST" class="form-inline">
+                            <input type="hidden" name="target_user_id" value="<?= $row['user_id'] ?>">
+                            <button type="submit" name="delete" class="btn btn-danger btn-sm">Remove User</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</div>
 
-                    <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" style="display:inline;">
-                        <input type="hidden" name="target_user_id" value="<?= $row['user_id'] ?>">
-                        <select name="new_status_id">
-                            <?php foreach ($statuses as $status): ?>
-                            <option value="<?= $status['status_id'] ?>"
-                                <?= $status['status_id'] == $row['status_id'] ? 'selected' : '' ?>>
-                                <?= $status['status_name'] ?>
-                            </option>
-                            <?php endforeach; ?>
-                        </select>
-                        <button type="submit" name="change_status" class="btn btn-primary btn-sm"
-                            style="margin-left:10px; padding:5px;">Update
-                            Status</button>
-                    </form>
-                    <form action="delete.php" method="POST" style="display:inline;">
-                        <input type="hidden" name="target_user_id" value="<?= $row['user_id'] ?>">
-                        <button type="submit" name="delete" class="btn btn-danger btn-sm"
-                            style="margin-left:130px;">Remove
-                            User</button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-        <?php endwhile; ?>
-    </tbody>
-</table>
 
-<?php include("../includes/footer.php"); ?>
 
 <style>
-.button-group {
-    display: flex;
-    flex-direction: column;
-    /* Stack items vertically */
-    align-items: start;
-    /* Align buttons to the start (left-aligned) */
-    gap: 0.5rem;
-    /* Add some space between buttons */
+body {
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
 }
 
-.button-group form {
-    margin: 0;
-    /* Remove default margin from forms */
+.container {
+    max-width: 90%;
+    width: 1000px;
+    margin: 30px auto;
+    height: max-content;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    font-size: 36px;
+    color: #6a0572;
+    margin-bottom: 30px;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #D8BFD8;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: space-evenly;
+}
+
+.form-inline {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.form-control {
+    padding: 6px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-sm {
+    padding: 4px 10px;
+    font-size: 12px;
 }
 </style>

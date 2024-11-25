@@ -4,12 +4,19 @@ include("../includes/config.php");
 include("../includes/header.php");
 
 if (!isset($_SESSION['user_id'])) {
-    $_SESSION['message'] = 'Please log in to view your reviews.';
+    $_SESSION['message'] = 'Please log in to access resources';
     header("Location: /kpopstore/user/login.php");
-    exit();
 }
 
 $user_id = $_SESSION['user_id'];
+$sql = "SELECT r.role_id FROM user u INNER JOIN role r ON u.role_id = r.role_id WHERE u.user_id = '$user_id' AND r.role_id = 2 LIMIT 1";
+$result= mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) == 0) {
+    $_SESSION['message'] = 'You must be logged in as user to access this page.';
+    header("Location: /kpopstore/user/login.php");
+    exit();
+}
 
 $sql_reviews = "SELECT review_id, orderinfo_id, comment, rate, img_paths
                 FROM reviewdetails WHERE user_id = '$user_id'";
@@ -168,76 +175,56 @@ include("../includes/footer.php");
 <style>
 .reviews-container {
     margin: 30px auto;
-    /* Center and add space */
     padding: 20px;
     max-width: 900px;
-    /* Limit the width for better readability */
     background-color: #fdfdfd;
-    /* Light background for better contrast */
     border: 1px solid #ddd;
-    /* Subtle border */
     border-radius: 10px;
-    /* Smooth corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Soft shadow for elevation */
 }
 
 .reviews-container h3 {
     font-size: 24px;
     font-weight: bold;
     color: #333;
-    /* Darker text color for better visibility */
     margin-bottom: 20px;
     text-align: center;
-    /* Center the header */
 }
 
 .review-list {
     margin-top: 10px;
     list-style: none;
-    /* Remove default list styling */
     padding: 0;
 }
 
 .review-item {
     background-color: #fff;
-    /* White background for each item */
     border: 1px solid #eee;
-    /* Light border for separation */
     border-radius: 8px;
-    /* Rounded corners */
     padding: 15px;
     margin-bottom: 20px;
-    /* Space between items */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow effect */
 }
 
 .review-rating {
     color: #ffb400;
-    /* Gold stars for ratings */
     font-size: 16px;
     margin-bottom: 10px;
-    /* Space below the stars */
 }
 
 .star {
     font-size: 20px;
     margin-right: 2px;
-    /* Space between stars */
 }
 
 .review-images {
     margin-top: 15px;
-    /* Space above images */
 }
 
 .image-gallery {
     display: flex;
     flex-wrap: wrap;
-    /* Allow images to wrap if they exceed container width */
     gap: 10px;
-    /* Space between images */
     margin-top: 10px;
 }
 
@@ -263,68 +250,51 @@ include("../includes/footer.php");
 .review-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    /* Maintain aspect ratio */
+    object-fit: contain;
     transition: transform 0.3s, box-shadow 0.3s;
-    /* Smooth hover effect */
 }
 
 .image-item:hover .review-image {
     transform: scale(1.1);
-    /* Slight zoom on hover */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    /* Enhanced shadow on hover */
 }
 
 .review-actions {
     margin-top: 15px;
-    /* Space above actions */
     display: flex;
     gap: 10px;
-    /* Space between buttons */
 }
 
 .review-actions button {
     padding: 8px 12px;
-    /* Button padding */
     font-size: 14px;
     border-radius: 5px;
-    /* Rounded corners */
     border: none;
-    /* Remove default border */
     cursor: pointer;
     transition: background-color 0.3s ease;
-    /* Smooth color change */
 }
 
 .review-actions .btn-primary {
     background-color: #007bff;
-    /* Primary blue */
     color: #fff;
-    /* White text */
 }
 
 .review-actions .btn-primary:hover {
     background-color: #0056b3;
-    /* Darker blue on hover */
 }
 
 .review-actions .btn-danger {
     background-color: #dc3545;
-    /* Danger red */
     color: #fff;
-    /* White text */
 }
 
 .review-actions .btn-danger:hover {
     background-color: #a71d2a;
-    /* Darker red on hover */
 }
 
 
 .modal {
     display: none;
-    /* Hidden by default */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -332,7 +302,6 @@ include("../includes/footer.php");
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
-    /* Black background with transparency */
 }
 
 .modal-content {
@@ -370,23 +339,18 @@ textarea {
 
 .stars span.selected {
     color: #ffcc00;
-    /* Yellow for selected stars */
 }
 
 .stars span:hover,
 .stars span:hover~span {
     color: #ffcc00;
-    /* Highlight stars on hover */
 }
 
 .stars span {
     font-size: 24px;
     color: #ccc;
-    /* Default gray for unselected stars */
     cursor: pointer;
-    /* Show pointer cursor */
     transition: color 0.3s ease;
-    /* Smooth color change */
 }
 
 .upload-section {
@@ -399,21 +363,15 @@ textarea {
 
 .modal-content h3 {
     color: black;
-    /* Change the heading color to black */
     font-size: 18px;
-    /* Optional: Adjust font size if needed */
     font-weight: bold;
-    /* Optional: Make the text bold */
 }
 
 /* Rating Text */
 .stars label {
     color: black;
-    /* Change the rating label text to black */
     font-size: 16px;
-    /* Optional: Adjust font size */
     font-weight: bold;
-    /* Optional: Make the text bold */
 }
 </style>
 

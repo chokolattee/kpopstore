@@ -3,7 +3,29 @@ session_start();
 include('./includes/config.php');
 include('./includes/header.php');
 
-// SQL query to get item details
+// CREATE VIEW item_details AS
+// SELECT 
+//     i.item_id, 
+//     i.item_name,
+//     i.description, 
+//     c.description AS category, 
+//     i.sell_price, 
+//     ar.artist_name AS artist_name, 
+//     s.quantity, 
+//     GROUP_CONCAT(ii.img_path ORDER BY ii.img_path) AS images
+// FROM 
+//     item i
+// LEFT JOIN
+//     category c ON i.category_id = c.category_id
+// LEFT JOIN 
+//     artists ar ON i.artist_id = ar.artist_id 
+// LEFT JOIN 
+//     stock s ON i.item_id = s.item_id
+// LEFT JOIN 
+//     itemimg ii ON i.item_id = ii.item_id
+// GROUP BY 
+//     i.item_id;
+
 $sql = "SELECT id.item_id, id.item_name, id.description, ii.img_path, id.sell_price, id.quantity FROM
                 item_details id
                 LEFT JOIN itemimg ii ON ii.item_id = id.item_id
@@ -137,25 +159,27 @@ if (isset($_POST['item_id'])) {
                     <p><?php echo nl2br(($review['comment'])); ?></p>
 
                     <!-- Display Review Images -->
-                    <?php if (!empty($reviewImages)): ?>
-                    <div class="review-images">
-                        <div class="image-gallery">
-                            <?php
+                    <?php if (!empty($reviewImages) && !empty($review['img_paths'])): ?>
+                        <div class="review-images">
+                            <div class="image-gallery">
+                                <?php
                                 foreach ($reviewImages as $image):
                                     echo "<div class='image-item'>";
                                     echo "<img src='/kpopstore/review/" . trim($image) . "' alt='Review Image' class='review-image'>";
                                     echo "</div>";
                                 endforeach;
-                            ?>
+                                ?>
+                            </div>
                         </div>
-                    </div>
+                    <?php else: ?>
+                        <p><em>No images for this review.</em></p>
                     <?php endif; ?>
                 </div>
-                <?php endforeach; ?>
-            </div>
-            <?php else: ?>
-            <p>No reviews yet for this item.</p>
-            <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p>No reviews yet for this item.</p>
+    <?php endif; ?>
         </div>
     </main>
 </body>
@@ -163,7 +187,6 @@ if (isset($_POST['item_id'])) {
 </html>
 
 <script>
-// Slider functionality
 let currentSlide = 0;
 
 function showSlide(index) {

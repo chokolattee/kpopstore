@@ -53,11 +53,9 @@ try {
 
     $_SESSION['orderinfo_id'] = $orderinfo_id;
 
-    // Prepare the orderline statement outside the loop
     $sql_orderline = "INSERT INTO orderline(orderinfo_id, item_id, quantity) VALUES (?, ?, ?)";
     $stmt_orderline = mysqli_prepare($conn, $sql_orderline);
 
-    // Prepare the stock update statement outside the loop
     $sql_stock = "UPDATE stock SET quantity = quantity - ? WHERE item_id = ?";
     $stmt_stock = mysqli_prepare($conn, $sql_stock);
 
@@ -65,11 +63,9 @@ try {
         $item_id = $cart_item['item_id'];
         $quantity = $cart_item['item_qty'];
 
-        // Bind and execute the orderline statement
         mysqli_stmt_bind_param($stmt_orderline, 'iii', $orderinfo_id, $item_id, $quantity);
         mysqli_stmt_execute($stmt_orderline);
 
-        // Bind and execute the stock update statement
         mysqli_stmt_bind_param($stmt_stock, 'ii', $quantity, $item_id);
         mysqli_stmt_execute($stmt_stock);
     }

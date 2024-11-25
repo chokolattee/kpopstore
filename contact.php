@@ -1,5 +1,9 @@
 <?php
+session_start();
 include('./includes/header.php');
+include('./includes/config.php');
+
+
 ?>
 
 
@@ -10,7 +14,47 @@ include('./includes/header.php');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
-    <style>
+</head>
+
+<body style="background-color: #E6E0F4 ">
+    <br>
+    <br>
+    <div class="contact-container" ; style="background-color: #D2C8EA ">
+        <h2>Contact Us</h2>
+        <!-- Developer Section -->
+        <div class=" developers">
+            <div class="developer">
+                <img src="im1.png" alt="Developer 1">
+                <h3>Mary Pauline Calungsod</h3>
+            </div>
+            <div class="developer">
+                <img src="im2.png" alt="Developer 2">
+                <h3>Kimberly G. Eledia</h3>
+            </div>
+        </div>
+        <!-- Contact Details -->
+        <div class="contact-item">
+            <strong>Phone Number:</strong>
+            <span><a href="09679171629"></a> 09679171629</span>
+        </div>
+        <div class=" contact-item">
+            <strong>Email Address:</strong>
+            <span><a href="hallyu@gmail.com">hallyu@gmail.com</a></span>
+        </div>
+        <div class="contact-item">
+            <strong>Address:</strong>
+            <span>Taguig City</span>
+        </div>
+        <div class="contact-item">
+            <strong>Working Hours:</strong>
+            <span>Monday - Sunday: 9:00 AM - 6:00 PM</span>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<style>
     body {
         font-family: Arial, sans-serif;
         background-color: #f4f4f9;
@@ -83,42 +127,3 @@ include('./includes/header.php');
         color: #333;
     }
     </style>
-</head>
-
-<body style="background-color: #E6E0F4 ">
-    <br>
-    <br>
-    <div class="contact-container" ; style="background-color: #D2C8EA ">
-        <h2>Contact Us</h2>
-        <!-- Developer Section -->
-        <div class=" developers">
-            <div class="developer">
-                <img src="im1.png" alt="Developer 1">
-                <h3>Mary Pauline Calungsod</h3>
-            </div>
-            <div class="developer">
-                <img src="im2.png" alt="Developer 2">
-                <h3>Kimberly G. Eledia</h3>
-            </div>
-        </div>
-        <!-- Contact Details -->
-        <div class="contact-item">
-            <strong>Phone Number:</strong>
-            <span><a href="09679171629"></a> 09679171629</span>
-        </div>
-        <div class=" contact-item">
-            <strong>Email Address:</strong>
-            <span><a href="hallyu@gmail.com">hallyu@gmail.com</a></span>
-        </div>
-        <div class="contact-item">
-            <strong>Address:</strong>
-            <span>Taguig City</span>
-        </div>
-        <div class="contact-item">
-            <strong>Working Hours:</strong>
-            <span>Monday - Sunday: 9:00 AM - 6:00 PM</span>
-        </div>
-    </div>
-</body>
-
-</html>

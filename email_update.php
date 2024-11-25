@@ -36,26 +36,23 @@ $result = mysqli_query($conn, $sql);
 
 if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-        $item_names = explode(',', $row['items']); // Exploding items (comma-separated)
-        $quantities = explode(',', $row['quantities']); // Exploding quantities (comma-separated)
-        $sell_prices = explode(',', $row['sell_prices']); // Exploding prices (comma-separated)
+        $item_names = explode(',', $row['items']); 
+        $quantities = explode(',', $row['quantities']); 
+        $sell_prices = explode(',', $row['sell_prices']); 
         $rate = $row['shipping_rate']; 
         $status = $row['status']; 
         $address = $row['address'];
         $date_placed = $row['date_placed'];
         $total_amount = $row['total_amount'];
 
-        // Ensure that the lengths of items, quantities, and prices arrays match
         $item_subtotal = 0;
         for ($i = 0; $i < count($item_names); $i++) {
             $item_name = $item_names[$i];
             $quantity = (int) $quantities[$i];
             $sell_price = (float) $sell_prices[$i];
 
-            // Calculate the subtotal for each item
             $item_subtotal += $quantity * $sell_price;
 
-            // Add item details to the table
             $order_details .= "
                 <tr>
                     <td style='border: 1px solid #ddd; padding: 8px;'>{$item_name}</td>
@@ -73,14 +70,11 @@ if ($result && mysqli_num_rows($result) > 0) {
     $order_details = "<tr><td colspan='4' style='text-align: center;'>No order details found.</td></tr>";
 }
 
-// Sum the subtotals explicitly
 $total_subtotal = array_sum($subtotals); // Sum of all item subtotals
 
-// Adding shipping rate to the total amount
 $total_amount_with_shipping = $total_subtotal + $rate; // Include shipping in the total amount
 
 try {
-    // Initialize PHPMailer
     $mail = new PHPMailer(true);
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
@@ -90,11 +84,9 @@ try {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port = 465;
 
-    // Sender and recipient
     $mail->setFrom('hallyu0401@gmail.com', 'Hallyu - Kpop Store'); 
     $mail->addAddress($user_email, $customerName);
 
-    // Email content
     $mail->isHTML(true);
     $mail->Subject = "Order Update for Order ID:{$orderinfo_id}";
     $mail->Body = "

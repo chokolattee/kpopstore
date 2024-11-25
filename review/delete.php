@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('../includes/config.php');
+
 $review_id = $_POST['review_id'];
 
 $sql= "SELECT img_path FROM reviewimg WHERE review_id = $review_id";

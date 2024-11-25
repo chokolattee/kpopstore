@@ -1,9 +1,8 @@
 <?php
 session_start();
 include("../includes/config.php");
-include("../includes/header.php");
 
-if (!isset($_SESSION['user_id']) || !isset($_POST['orderinfo_id'])) {
+if (!isset($_SESSION['user_id'])) {
     $_SESSION['message'] = "You must be logged in as admin to access this page.";
     header("Location: /kpopstore/user/login.php");
     exit();
@@ -23,14 +22,14 @@ if (isset($_POST['submit'])) {
         header("Location: create.php");
         exit();
     }
-    
+
     if (!preg_match("/^[a-zA-Z0-9\s,.-]+$/", $address)) {
         $_SESSION['message'] = 'Invalid address.';
         header("Location: create.php");
         exit();
     }
 
-    if(!preg_match("/^\w+@\w+\.\w+/", $email)) {
+    if (!preg_match("/^\w+@\w+\.\w+/", $email)) {
         $_SESSION['message'] = 'Email invalid format';
         header("Location: create.php");
         exit();
@@ -63,7 +62,7 @@ if (isset($_POST['submit'])) {
             $target = '../user/uploads/' . basename($_FILES['user_img']['name']);
 
             if (move_uploaded_file($source, $target)) {
-                $_SESSION['imageError'] = null; 
+                $_SESSION['imageError'] = null;
             } else {
                 $_SESSION['imageError'] = "Could not upload image.";
                 header("Location: create.php");
@@ -87,6 +86,4 @@ if (isset($_POST['submit'])) {
         $_SESSION['success'] = 'profile saved';
         header("Location: users.php");
     }
-
 }
-?>

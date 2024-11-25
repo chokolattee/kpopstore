@@ -3,26 +3,32 @@ session_start();
 include('./includes/header.php');
 include('./includes/config.php');
 
-include('./includes/alert.php');
+
 
 echo '<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">';
 
 if (!isset($_SESSION['user_id'])) {
-  $_SESSION['message'] = 'Please log in to view your orders.';
-  header("Location: /kpopstore/user/login.php");
-  exit();
+    $_SESSION['message'] = 'Please log in to access resources';
+    header("Location: /kpopstore/user/login.php");
 }
 
 $user_id = $_SESSION['user_id'];
+$sql = "SELECT r.role_id FROM user u INNER JOIN role r ON u.role_id = r.role_id WHERE u.user_id = '$user_id' AND r.role_id = 2 LIMIT 1";
+$result= mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) == 0) {
+    $_SESSION['message'] = 'You must be logged in as user to access this page.';
+    header("Location: /kpopstore/user/login.php");
+    exit();
+}
+
+include('./includes/alert.php');
 
 $sql = "SELECT DISTINCT orderinfo_id, date_placed, status 
         FROM orderdetails 
         WHERE user_id = $user_id";
 
 $result = mysqli_query($conn, $sql);
-
-
-
 
 echo "<div class='order-container'>";
 echo "<div class='d-flex flex-wrap justify-content-center'>";

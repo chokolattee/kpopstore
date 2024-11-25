@@ -1,8 +1,6 @@
 <?php
 session_start();
-
 include("../includes/config.php");
-include("../includes/alert.php");
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['message'] = 'Please log in to access resources';
@@ -32,7 +30,7 @@ $row = mysqli_fetch_assoc($result);
 $role_id = $row['role_id'];
 
 if ($role_id == 1) {
-    include("../includes/headera.php"); 
+    include("../includes/headera.php");
 } else {
     include("../includes/header.php");
 }
@@ -48,7 +46,8 @@ $imgPath = $row['user_img'];
     <br>
     <br>
     <div class="container my-container mt-5">
-        <!-- Toggle Buttons for User Info and Security -->
+    <?php include("../includes/alert.php"); ?>   
+    <!-- Toggle Buttons for User Info and Security -->
         <div class="btn-group mb-3" role="group" aria-label="Info and Security">
             <button type="button" class="btn btn-primary" id="userInfoBtn">Personal Info</button>
             <button type="button" class="btn btn-secondary" id="securityBtn">Security</button>
@@ -99,7 +98,7 @@ $imgPath = $row['user_img'];
                     <br>
                     <div class="button-row">
                         <button type="submit" name="update_info" class="btn btn-primary">Submit</button>
-                        <button type="submit" a href="/kpopstore/index.php" class="btn btn-secondary mt-3">Cancel</ba>
+                        <button type="submit" a href="/kpopstore/index.php" class="btn btn-secondary">Cancel</ba>
                     </div>
 
                 </div>
@@ -121,9 +120,10 @@ $imgPath = $row['user_img'];
                     <label for="newPass">New Password</label>
                     <input type="password" class="form-control" id="newPass" name="newPass" />
 
-                    <button type="submit" name="update_security" class="btn btn-primary mt-3">Submit</button>
-                    <a href="/kpopstore/index.php" class="btn btn-secondary mt-3" id="cancelBtn">Cancel</a>
-                </div>
+                    <div class="button-row">
+                        <button type="submit" name="update_security" class="btn btn-primary">Submit</button>
+                        <button type="submit" a href="/kpopstore/index.php" class="btn btn-secondary">Cancel</ba>
+                    </div>
             </div>
         </form>
     </div>
@@ -154,7 +154,7 @@ $imgPath = $row['user_img'];
     border-radius: 8px;
     padding: 20px;
     max-width: 600px;
-    height: 600px;
+    height: max-content;
     margin: 0 auto;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15);
 

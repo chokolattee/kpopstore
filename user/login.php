@@ -7,8 +7,9 @@ include("../includes/config.php");
 if (isset($_POST['submit'])) {
     $email = trim($_POST['email']);
     $pass = sha1(trim($_POST['password']));
+
     $sql = "
-        SELECT u.user_id, u.email, r.description, s.status_id
+        SELECT u.user_id, u.email, r.role_id, r.description, s.status_id
         FROM user u
         JOIN role r ON u.role_id = r.role_id
         JOIN user_status s ON u.status_id = s.status_id
@@ -21,7 +22,7 @@ if (isset($_POST['submit'])) {
     mysqli_stmt_execute($stmt);
 
     mysqli_stmt_store_result($stmt);
-    mysqli_stmt_bind_result($stmt, $user_id, $email, $description, $status_id);
+    mysqli_stmt_bind_result($stmt, $user_id, $email, $role_id, $description, $status_id);
 
     if (mysqli_stmt_num_rows($stmt) === 1) {
         mysqli_stmt_fetch($stmt);
@@ -29,26 +30,31 @@ if (isset($_POST['submit'])) {
         if ($status_id != 1) {
             $_SESSION['message'] = 'Your account is deactivated. Please contact support.';
             header("Location: login.php");
-            exit;
+            exit();
         }
 
         $_SESSION['email'] = $email;
         $_SESSION['user_id'] = $user_id;
-        $_SESSION['role'] = $description;
+        $_SESSION['role'] = $description;  
+        $_SESSION['role_id'] = $role_id;  
 
-        if ($user_id == 1) {
+        if ($role_id == 1) {  
             header("Location: /kpopstore/admin/dashboard.php");
-            exit;
+            exit();
+        } else { 
+            header("Location: ../index.php"); 
+            exit();
         }
 
-        header("Location: ../index.php");
-        exit;
     } else {
         $_SESSION['message'] = 'Wrong email or password';
+        header("Location: login.php"); 
+        exit();
     }
 }
 ?>
-<div class="login-form-container">
+
+<div class="login-form-container" style="height: 450px;">
     <h2><b>Log In</b></h2>
     <br>
     <?php include("../includes/alert.php"); 

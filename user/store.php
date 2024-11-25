@@ -4,9 +4,9 @@ include("../includes/config.php");
 include("../includes/header.php");
 
 if (isset($_POST['submit'])) {
-    $fname = trim($_POST['fname']);
-    $lname = trim($_POST['lname']);
-    $address = trim($_POST['address']);
+    $fname = ucwords(trim($_POST['fname']));
+    $lname = ucwords(trim($_POST['lname']));
+    $address = ucwords(trim($_POST['address']));
     $contact = trim($_POST['contact']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);

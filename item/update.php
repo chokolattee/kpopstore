@@ -86,7 +86,7 @@ if (isset($_FILES['images']) && $imageCount > 0 && $_FILES['images']['name'][0] 
 
 $sql_update = "UPDATE item 
                SET item_name = '$name', 
-                   description = '$description', 
+                   description = \"$description\", 
                    category_id = $category_id, 
                    artist_id = $artist_id, 
                    sell_price = $sell_price 

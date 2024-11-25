@@ -3,7 +3,7 @@ session_start();
 include('./includes/config.php');
 
 if (!isset($_SESSION['user_id']) || !isset($_POST['orderinfo_id'])) {
-    $_SESSION['message'] = "Please log in and select an order to update.";
+    $_SESSION['message'] = "You must be logged in as user to access this page.";
     header("Location: /kpopstore/user/login.php");
     exit();
 }
@@ -14,7 +14,6 @@ $dateShipped = $_POST['date_shipped'];
 $dateReceived = $_POST['date_received'];
 $userId = $_SESSION['user_id'];
 
-// Fetch user information
 $sql = "SELECT CONCAT(fname, ' ', lname) AS customerName, email FROM user WHERE user_id = $userId LIMIT 1";
 $result = mysqli_query($conn, $sql);
 

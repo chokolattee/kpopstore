@@ -4,9 +4,9 @@ require('../includes/config.php');
 
 $user_id = $_SESSION['user_id'];
 
-$fname = trim($_POST['fname']);
-$lname = trim($_POST['lname']);
-$address = trim($_POST['address']);
+$fname = ucwords(trim($_POST['fname']));
+    $lname = ucwords(trim($_POST['lname']));
+    $address = ucwords(trim($_POST['address']));
 $contact = trim($_POST['contact']);
 $userimg = $_SESSION['user_img'];
 

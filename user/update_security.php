@@ -8,7 +8,7 @@ $email = trim($_POST['email']);
 $oldPassword = trim($_POST['oldPass']);
 $newPassword = trim($_POST['newPass']);
 
-if (!preg_match("/^[a-zA-Z0-9._%+-]+@gmail.com/", $email)) {
+if (!preg_match("/^\w+@\w+\.\w+/", $email)) {
     $_SESSION['message'] = 'Email invalid format';
     header("Location: register.php");
     exit();
@@ -29,7 +29,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     $currentEmail = $row['email'];
 
     if (sha1($oldPassword) === $currentPassword || empty($oldPassword)) {
-        $updateQuery = "UPDATE user SET email = '$email'";  // Default query updates email
+        $updateQuery = "UPDATE user SET email = '$email' WHERE user_id = '$user_id'";  // Default query updates email
         $message = 'Email updated successfully!';  // Default message for email only
 
         if (!empty($newPassword)) {

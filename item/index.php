@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include('../includes/config.php');
 
 if (!isset($_SESSION['user_id'])) {
@@ -14,7 +15,9 @@ $result= mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) == 0) {
     $_SESSION['message'] = 'You must be logged in as admin to access this page.';
     header("Location: /kpopstore/user/login.php");
+    exit();
 }
+include("../includes/headera.php");
 
 if(isset($_GET['search'])) {
     $keyword = strtolower(trim($_GET['search']));
@@ -27,15 +30,17 @@ else {
 if ($keyword) {
     $sql1 = "SELECT * FROM item_details WHERE item_name LIKE '%{$keyword}%'";
 } else {
-    $sql1 = "SELECT * FROM item_details";
+    $sql1 = "SELECT * FROM item_details ORDER BY item_id DESC";
 }
 $result1 = mysqli_query($conn, $sql1);
 $itemCount = mysqli_num_rows($result1);
 
+include("../includes/alert.php");
 ?>
 
 <body>
-    <a href="/kpopstore/item/create.php" class="btn btn-primary btn-lg" role="button">Add Item</a>
+<h1 class="text-center mb-4">Item</h1>
+<a href="/kpopstore/item/create.php" class="btn btn-primary mb-3">Add Item</a>
     <h2>Number of Items: <?= $itemCount ?></h2>
     <table class="table table-striped table-bordered">
         <thead>
