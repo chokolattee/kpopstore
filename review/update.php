@@ -13,7 +13,7 @@ $new_images = $_FILES['img_path'];
 
 $badWords = ['damn', 'hell', 'ass', 'fucking', 'kingina', 'bullshit', 'bitch', 'crap', 'dick', 'fuck', 'shit', 'bastard', 'nigga', 'slut', 'tangina',
 'yawa', 'kupal', 'buang', 'boang', 'taena', 'taenamo', 'pakshet', 'pakshit', 'gago', 'leche', 'punyeta', 'lintek', 'peste', 'tanga', 'gaga',
-'puta', 'putragis', 'lintik', 'shet','pucha' ];
+'puta', 'putragis', 'lintik', 'shet','pucha', 'pota' ];
 
 
 foreach ($badWords as $badWord) {
