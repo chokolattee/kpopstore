@@ -3,6 +3,28 @@ session_start();
 include("../includes/config.php");
 include("../includes/header.php");
 
+// CREATE VIEW reviewdetails AS
+// SELECT 
+//     r.*, 
+//     od.full_name,  
+//     GROUP_CONCAT(DISTINCT ri.img_path) AS img_paths, 
+//     GROUP_CONCAT(DISTINCT i.item_id) AS item_ids
+// FROM 
+//     review r
+// JOIN 
+//     orderdetails od ON r.user_id = od.user_id
+// JOIN 
+//     orderline ol ON ol.orderinfo_id = r.orderinfo_id
+// JOIN 
+//     orderinfo oi ON oi.orderinfo_id = ol.orderinfo_id
+// JOIN 
+//     item i ON i.item_id = ol.item_id
+// LEFT JOIN 
+//     reviewimg ri ON r.review_id = ri.review_id
+// GROUP BY 
+//     r.review_id, r.orderinfo_id;
+
+
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['message'] = 'Please log in to access resources';
     header("Location: /kpopstore/user/login.php");
