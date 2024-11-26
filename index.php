@@ -43,19 +43,24 @@ while ($row = mysqli_fetch_assoc($results)) {
         $result_role = mysqli_query($conn, $sql_role_check);
 
         if (mysqli_num_rows($result_role) > 0) {
+            echo '<div class="button-container">';
             echo '
-            <div class="button-container">
-        <form action="view_itemdetails.php" method="POST" style="display:inline;">
-            <input type="hidden" name="item_id" value="' . $itemId . '">
-            <button type="submit" class="item_details">View Details</button>
-        </form>
+            <form action="view_itemdetails.php" method="POST" style="display:inline;">
+                <input type="hidden" name="item_id" value="' . $itemId . '">
+                <button type="submit" class="item_details">View Details</button>
+            </form>';
 
-        <form action="cart_update.php" method="POST" style="display:inline;">
-            <input type="hidden" name="type" value="add">
-            <input type="hidden" name="item_id" value="' . $itemId . '">
-            <button type="submit" class="add_to_cart">Add to Cart</button>
-        </form>
-    </div>';
+            if ($quantity > 0) {
+                echo '
+                <form action="cart_update.php" method="POST" style="display:inline;">
+                    <input type="hidden" name="type" value="add">
+                    <input type="hidden" name="item_id" value="' . $itemId . '">
+                    <button type="submit" class="add_to_cart">Add to Cart</button>
+                </form>';
+            } else {
+                echo '<button class="add_to_cart_disabled" disabled>Out of Stock</button>';
+            }
+            echo '</div>';
         }
     } else {
         echo '
