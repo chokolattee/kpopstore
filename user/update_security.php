@@ -20,6 +20,15 @@ if (strlen($newPassword) < 6 && !empty($newPassword)) {
     exit();
 }
 
+$emailCheckQuery = "SELECT user_id FROM user WHERE email = '$email' AND user_id != '$user_id'";
+$emailCheckResult = mysqli_query($conn, $emailCheckQuery);
+
+if ($emailCheckResult && mysqli_num_rows($emailCheckResult) > 0) {
+    $_SESSION['message'] = 'This email is already registered with another account.';
+    header("Location: profile.php");
+    exit();
+}
+
 $sql = "SELECT password, email FROM user WHERE user_id = '$user_id'";
 $result = mysqli_query($conn, $sql);
 
