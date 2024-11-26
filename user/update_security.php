@@ -8,7 +8,7 @@ $email = trim($_POST['email']);
 $oldPassword = trim($_POST['oldPass']);
 $newPassword = trim($_POST['newPass']);
 
-if (!preg_match("/^\w+@\w+\.\w+/", $email)) {
+if (!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $email)) {
     $_SESSION['message'] = 'Email invalid format';
     header("Location: register.php");
     exit();

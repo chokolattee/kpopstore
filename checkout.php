@@ -19,10 +19,10 @@ $result = mysqli_query($conn, $sql);
 
 if ($result && mysqli_num_rows($result) > 0) {
     $user = mysqli_fetch_assoc($result);
-    $customerName = $user['customerName']; // Added to prevent undefined variable
+    $customerName = $user['customerName']; 
     $email = $user['email'];
     $_SESSION['customerName'] = $customerName;
-    $_SESSION['user_email'] = $email; // Save email for use in email.php
+    $_SESSION['user_email'] = $email; 
 } else {
     echo "Error: Unable to fetch user information.";
     exit();

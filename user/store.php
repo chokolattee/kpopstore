@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    if(!preg_match("/^\w+@\w+\.\w+/", $email)) {
+    if(!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $email)) {
         $_SESSION['message'] = 'Email invalid format';
         header("Location: register.php");
         exit();
